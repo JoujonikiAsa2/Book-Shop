@@ -1,6 +1,7 @@
 import { Product } from '../products/product.model'
 import { TOrder } from './order.interface'
 import { Order } from './order.model'
+import { orderSchema } from './order.validation'
 
 const createOrderIntoDB = async (order: TOrder) => {
   const product = await Product.findById(order.product)
@@ -28,7 +29,8 @@ const createOrderIntoDB = async (order: TOrder) => {
   const totalPrice = product.price * order.quantity
   order.totalPrice = totalPrice
 
-  const result = await Order.create(order)
+  const zodValidator = orderSchema.parse(order)   
+  const result = await Order.create(zodValidator)
   return result
 }
 
