@@ -25,6 +25,21 @@ const createProduct = async (req: Request, res: Response) => {
   }
 }
 
+//controller for getting all books
+const getAllProducts = async (req: Request, res: Response) => {
+  try {
+    const result = await ProductService.getAllProductsFromDB()
+    res.status(200).json({
+      message: 'Books retrieved successfully',
+      status: true,
+      data: result,
+    })
+  } catch (err: unknown) {
+    res.send(err)
+  }
+}
+
 export const productController = {
   createProduct,
+  getAllProducts
 }
