@@ -7,13 +7,22 @@ const createProductIntoDB = async (product: TProduct) => {
   return result
 }
 
+//Retrieves all books from the database
 const getAllProductsFromDB = async () =>{
   const result = await Product.find({})
   return result
 }
 
 
+//Retrieves a single book from the database.
+const getSignleProductFromDB = async (_id: string) => {
+  const result = await Product.findById(_id)
+  return result
+}
+
+
 export const ProductService = {
   createProductIntoDB,
-  getAllProductsFromDB
+  getAllProductsFromDB,
+  getSignleProductFromDB
 }

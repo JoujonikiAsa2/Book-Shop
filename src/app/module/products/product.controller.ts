@@ -39,7 +39,24 @@ const getAllProducts = async (req: Request, res: Response) => {
   }
 }
 
+
+//controller for retrieves a single book
+const getProductById = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId
+    const result = await ProductService.getSignleProductFromDB(productId)
+    res.status(200).json({
+      message: 'Book retrieved successfully',
+      status: true,
+      data: result,
+    })
+  } catch (error: unknown) {
+    res.status(400).json(error)
+  }
+}
+
 export const productController = {
   createProduct,
-  getAllProducts
+  getAllProducts,
+  getProductById
 }
