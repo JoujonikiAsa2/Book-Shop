@@ -11,6 +11,8 @@ const productSchema = new Schema<TProduct>(
     },
     price: {
       type: Number,
+      min: [0, "Price must be a positive number"],
+      required: [true, "Price is required"],
     },
     category: {
       type: String,
@@ -31,6 +33,8 @@ const productSchema = new Schema<TProduct>(
     },
     quantity: {
       type: Number,
+      min: [0, "Quantity must be a positive number"],
+      required: [true, "Quantity is required"],
     },
     inStock: {
       type: Boolean,
@@ -46,6 +50,13 @@ const productSchema = new Schema<TProduct>(
     },
   }
 )
+
+productSchema.pre('save', function (next) {
+  this.createdAt = new Date()
+  this.updatedAt = new Date()
+  next()
+})
+
 
 
 export const Product = model<TProduct>('Products', productSchema)

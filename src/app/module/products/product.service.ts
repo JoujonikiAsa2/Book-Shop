@@ -13,6 +13,12 @@ const getAllProductsFromDB = async () =>{
   return result
 }
 
+//Retrieves all books from the database by category
+const getAllProductsByCategory = async (searchTerm: string) =>{
+  const result = await Product.find({category: {$regex: searchTerm, $options: 'i'}})
+  return result
+}
+
 
 //Retrieves a single book from the database.
 const getSignleProductFromDB = async (productId: string) => {
@@ -38,5 +44,6 @@ export const ProductService = {
   getAllProductsFromDB,
   getSignleProductFromDB,
   updateProductIntoDB,
-  deleteProductFromDB
+  deleteProductFromDB,
+  getAllProductsByCategory
 }
