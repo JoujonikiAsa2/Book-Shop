@@ -58,7 +58,7 @@ const getProductById = async (req: Request, res: Response) => {
 const updateProduct = async (req: Request, res: Response) => {
   try {
     const productId = req.params.productId
-    const product = {...req.body, updatedAt: new Date()}
+    const product = { ...req.body, updatedAt: new Date() }
     const result = await ProductService.updateProductIntoDB(productId, product)
     res.status(200).json({
       message: 'Book updated successfully',
@@ -70,9 +70,33 @@ const updateProduct = async (req: Request, res: Response) => {
   }
 }
 
+//controller for deleting a book
+const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId
+    const result = await ProductService.deleteProductFromDB(productId)
+    if (result.deletedCount === 1) {
+      res.status(200).json({
+        message: 'Book deleted successfully',
+        status: true,
+        data: {},
+      })
+    }
+    else{
+      res.status(400).json({
+        message: 'Book not found',
+        status: false,
+      })
+    }
+  } catch (error: unknown) {
+    res.status(400).json(error)
+  }
+}
+
 export const productController = {
   createProduct,
   getAllProducts,
   getProductById,
-  updateProduct
+  updateProduct,
+  deleteProduct,
 }

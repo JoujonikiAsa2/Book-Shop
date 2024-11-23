@@ -27,9 +27,16 @@ const updateProductIntoDB = async(productId: string, product: TProduct) => {
   return result
 }
 
+//Delete a book from the database
+const deleteProductFromDB = async (productId:string) => {
+  const result =  await Product.deleteOne({_id:productId})
+  return result
+}
+
 export const ProductService = {
   createProductIntoDB,
   getAllProductsFromDB,
   getSignleProductFromDB,
-  updateProductIntoDB
+  updateProductIntoDB,
+  deleteProductFromDB
 }
