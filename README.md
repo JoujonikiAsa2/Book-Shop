@@ -25,26 +25,26 @@ This is a backend application for managing a bookshop and is built with Node.js,
 - Mongoose
 - TypeScript
 
-## Getting Started Locally
+## Setup Instructions
 1. Clone the Repository
-```
-git clone https://github.com/JoujonikiAsa2/batch-4-assignment-2-SET-1.git
-cd batch-4-assignment-2-SET-1
-```
+<pre>
+    git clone https://github.com/JoujonikiAsa2/batch-4-assignment-2-SET-1.git
+    cd batch-4-assignment-2-SET-1
+</pre>
 
 3. Install Dependencies
-```
+<pre>
     npm i
-```
+</pre>
 4. Configure Environment Variables
-```
+<pre>
     NODE_ENV=development
     PORT=5000
     MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/<database>?retryWrites=true&w=majority
-```
+</pre>
 5. Run the Application
-```
+<pre>
     npm run start:dev
-```
+</pre>
 6. Test the API
 [http://localhost:5000/](http://localhost:5000/)
