@@ -21,6 +21,7 @@ const getAllProducts = async (req: Request, res: Response) => {
   try {
     if (req.query.searchTerm !== undefined) {
       const searchTerm = req.query.searchTerm
+      console.log(searchTerm)
       const result = await ProductService.getAllProductsByCategory(
         searchTerm as string,
       )
