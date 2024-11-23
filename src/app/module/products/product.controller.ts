@@ -39,7 +39,6 @@ const getAllProducts = async (req: Request, res: Response) => {
   }
 }
 
-
 //controller for retrieves a single book
 const getProductById = async (req: Request, res: Response) => {
   try {
@@ -55,8 +54,25 @@ const getProductById = async (req: Request, res: Response) => {
   }
 }
 
+//controller for updating a book details
+const updateProduct = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId
+    const product = {...req.body, updatedAt: new Date()}
+    const result = await ProductService.updateProductIntoDB(productId, product)
+    res.status(200).json({
+      message: 'Book updated successfully',
+      status: true,
+      data: result,
+    })
+  } catch (error: unknown) {
+    res.status(400).json(error)
+  }
+}
+
 export const productController = {
   createProduct,
   getAllProducts,
-  getProductById
+  getProductById,
+  updateProduct
 }

@@ -15,14 +15,21 @@ const getAllProductsFromDB = async () =>{
 
 
 //Retrieves a single book from the database.
-const getSignleProductFromDB = async (_id: string) => {
-  const result = await Product.findById(_id)
+const getSignleProductFromDB = async (productId: string) => {
+  const result = await Product.findById(productId)
   return result
 }
 
 
+//Updates a book into the database
+const updateProductIntoDB = async(productId: string, product: TProduct) => {
+  const result = await Product.findByIdAndUpdate({_id: productId}, product, {new: true})
+  return result
+}
+
 export const ProductService = {
   createProductIntoDB,
   getAllProductsFromDB,
-  getSignleProductFromDB
+  getSignleProductFromDB,
+  updateProductIntoDB
 }
