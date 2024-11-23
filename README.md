@@ -26,24 +26,27 @@ This is a backend application for managing a bookshop and is built with Node.js,
 - TypeScript
 
 ## Getting Started Locally
-1. Clone the Repository
-```
+1. Clone this repository to your local machine:
+```bash
 git clone https://github.com/JoujonikiAsa2/batch-4-assignment-2-SET-1.git
+```
+2. Move to the cloned directory
+```bash
 cd batch-4-assignment-2-SET-1
 ```
 
 3. Install Dependencies
-```
+```bash
 npm i
 ```
 4. Configure Environment Variables
-```
+```bash
 NODE_ENV=development
 PORT=5000
 MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/<database>?retryWrites=true&w=majority
 ```
-5. Run the Application
-```
+5. Start the local Server:
+```bash
 npm run start:dev
 ```
 6. Test the API
