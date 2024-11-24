@@ -48,7 +48,7 @@ DATABASE_URL=mongodb+srv://bookshopuser:nqpzDUs298y6pdAv@cluster0.ghkhwep.mongod
 ```
 5. Start the local Server:
 ```bash
-npm run start:dev
+npm run dev
 ```
 6. Test the API
 [http://localhost:5000/](http://localhost:5000/)
