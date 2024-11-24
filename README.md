@@ -44,7 +44,7 @@ npm i
 ```bash
 NODE_ENV=development
 PORT=5000
-MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/<database>?retryWrites=true&w=majority
+DATABASE_URL=mongodb+srv://bookshopuser:nqpzDUs298y6pdAv@cluster0.ghkhwep.mongodb.net/Store?retryWrites=true&w=majority&appName=Cluster0
 ```
 5. Start the local Server:
 ```bash

@@ -1,7 +1,8 @@
 import { model, Schema } from 'mongoose'
-import { TProduct } from './product.interface'
+import { TBook } from './book.interface'
 
-const productSchema = new Schema<TProduct>(
+//Creates a book schema
+const productSchema = new Schema<TBook>(
   {
     title: {
       type: String,
@@ -12,7 +13,6 @@ const productSchema = new Schema<TProduct>(
     price: {
       type: Number,
       min: [0, "Price must be a positive number"],
-      required: [true, "Price is required"],
     },
     category: {
       type: String,
@@ -51,12 +51,6 @@ const productSchema = new Schema<TProduct>(
   }
 )
 
-productSchema.pre('save', function (next) {
-  this.createdAt = new Date()
-  this.updatedAt = new Date()
-  next()
-})
 
 
-
-export const Product = model<TProduct>('Products', productSchema)
+export const Product = model<TBook>('Products', productSchema)

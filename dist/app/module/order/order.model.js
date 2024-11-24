@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-/* eslint-disable no-undef */
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -45,6 +43,7 @@ exports.orderSchema = new mongoose_1.Schema({
     },
     quantity: {
         type: Number,
+        min: [1, 'Quantity must be a positive number'],
     },
     totalPrice: {
         type: Number,

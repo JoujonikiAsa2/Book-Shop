@@ -1,11 +1,11 @@
-import { Product } from '../products/product.model'
+import { Product } from '../products/book.model'
 import { TOrder } from './order.interface'
 import { Order } from './order.model'
-import { orderSchema } from './order.validation'
 
 const createOrderIntoDB = async (order: TOrder) => {
   const product = await Product.findById(order.product)
 
+  //throw relavant error
   if (!product) {
     throw { message: 'Product not found', status: false }
   }
@@ -14,6 +14,7 @@ const createOrderIntoDB = async (order: TOrder) => {
     throw { message: 'Insufficient stock', status: false }
   }
 
+  //it reduce the quantity
   const updatedQuantity = product.quantity - order.quantity
   await Product.findByIdAndUpdate(
     { _id: order.product },
@@ -23,14 +24,13 @@ const createOrderIntoDB = async (order: TOrder) => {
         inStock: updatedQuantity > 0,
       },
     },
-    { new: true }
+    { new: true },
   )
 
   const totalPrice = product.price * order.quantity
   order.totalPrice = totalPrice
 
-  const zodValidator = orderSchema.parse(order)   
-  const result = await Order.create(zodValidator)
+  const result = await Order.create(order)
   return result
 }
 

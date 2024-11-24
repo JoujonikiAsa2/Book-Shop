@@ -20,6 +20,7 @@ export const orderSchema = new Schema<TOrder>({
   },
   quantity: {
     type: Number,
+    min: [1, 'Quantity must be a positive number'],
   },
   totalPrice: {
     type: Number,

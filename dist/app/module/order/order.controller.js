@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/no-require-imports */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -14,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.orderController = void 0;
 const order_service_1 = require("./order.service");
-const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createOrder = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const order = req.body;
         const result = yield order_service_1.OrderService.createOrderIntoDB(order);
@@ -25,22 +22,22 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
     catch (err) {
-        res.status(400).json(err);
+        next(err);
     }
 });
-const getRevenue = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getRevenue = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield order_service_1.OrderService.getRevenueFromDB();
         res.status(200).json({
             message: 'Revenue calculated successfully',
             status: true,
             data: {
-                totalRevenue: result[0].totalRevenue
+                totalRevenue: result
             }
         });
     }
     catch (err) {
-        res.status(400).json(err);
+        next(err);
     }
 });
 exports.orderController = {

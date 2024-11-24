@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/no-require-imports */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -13,19 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderService = void 0;
-const product_model_1 = require("../products/product.model");
+const book_model_1 = require("../products/book.model");
 const order_model_1 = require("./order.model");
-const order_validation_1 = require("./order.validation");
 const createOrderIntoDB = (order) => __awaiter(void 0, void 0, void 0, function* () {
-    const product = yield product_model_1.Product.findById(order.product);
+    const product = yield book_model_1.Product.findById(order.product);
+    //throw relavant error
     if (!product) {
         throw { message: 'Product not found', status: false };
     }
     if (product.quantity < order.quantity) {
         throw { message: 'Insufficient stock', status: false };
     }
+    //it reduce the quantity
     const updatedQuantity = product.quantity - order.quantity;
-    yield product_model_1.Product.findByIdAndUpdate({ _id: order.product }, {
+    yield book_model_1.Product.findByIdAndUpdate({ _id: order.product }, {
         $set: {
             quantity: updatedQuantity,
             inStock: updatedQuantity > 0,
@@ -33,8 +31,7 @@ const createOrderIntoDB = (order) => __awaiter(void 0, void 0, void 0, function*
     }, { new: true });
     const totalPrice = product.price * order.quantity;
     order.totalPrice = totalPrice;
-    const zodValidator = order_validation_1.orderSchema.parse(order);
-    const result = yield order_model_1.Order.create(zodValidator);
+    const result = yield order_model_1.Order.create(order);
     return result;
 });
 const getRevenueFromDB = () => __awaiter(void 0, void 0, void 0, function* () {

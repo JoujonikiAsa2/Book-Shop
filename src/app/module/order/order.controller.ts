@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { OrderService } from "./order.service"
 
-const createOrder = async (req: Request, res: Response) => {
+const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const order = req.body
         const result = await OrderService.createOrderIntoDB(order)
@@ -11,22 +11,22 @@ const createOrder = async (req: Request, res: Response) => {
             data: result
         })
     } catch (err: unknown) {
-        res.status(400).json(err)
+        next(err)
     }
 }
 
-const getRevenue = async (req: Request, res: Response) => {
+const getRevenue = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await OrderService.getRevenueFromDB()
         res.status(200).json({
             message: 'Revenue calculated successfully',
             status: true,
             data: {
-                totalRevenue: result[0].totalRevenue
+                totalRevenue: result
             }
         })
     } catch (err: unknown) {
-        res.status(400).json(err)
+        next(err)
     }
 }
 
