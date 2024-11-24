@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-require-imports */
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Product = void 0;
