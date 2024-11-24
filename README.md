@@ -1,7 +1,7 @@
 ## 1-Book Shop API
 This is a backend application for managing a bookshop and is built with Node.js, Express.js, TypeScript, and MongoDB. It enables book management, order placement, and revenue tracking. It also includes some exciting features, such as search and filtering. It also allows searching by category.
 
-[Live Link](https://batch-4-assignment-2-set-1.vercel.app/)
+[Live Link](https://book-shop-joujonikiasa2s-projects.vercel.app/)
 
 
 ## Table of Contents
