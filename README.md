@@ -1,5 +1,5 @@
 ## 1-Book Shop API
-This is a backend application for managing a bookshop and is built with Node.js, Express.js, TypeScript, and MongoDB. It enables book management, order placement, and revenue tracking. It also includes some exciting features, such as search and filtering. It also allows searching by category.
+This is a backend application for managing a bookshop and is built with Node.js, Express.js, TypeScript, Mongoose and MongoDB. It enables book management, order placement, and revenue tracking. It also includes some exciting features, such as search and filtering. It also allows searching by category.
 
 [Live Link](https://book-shop-joujonikiasa2s-projects.vercel.app/)
 
@@ -23,7 +23,7 @@ This is a backend application for managing a bookshop and is built with Node.js,
 4. Revenue Tracking
    - Aggregates total revenue from all orders.
 5. Validation
-   - Strong validation for request bodies using Zod and Mongoose
+   - Strong validation for request bodies using Mongoose
   
 
 ## Technologies
