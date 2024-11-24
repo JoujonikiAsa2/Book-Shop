@@ -43,7 +43,7 @@ const getAllBooks = async (req: Request, res: Response) => {
 //controller for retrieves a single book
 const getBookById = async (req: Request, res: Response) => {
   try {
-    const bookId = req.params.bookId
+    const bookId = req.params.productId
     const result = await BookService.getSignleBookFromDB(bookId)
     if (result) {
       res.status(200).json({
@@ -65,7 +65,7 @@ const getBookById = async (req: Request, res: Response) => {
 //controller for updating a book details
 const updateBook = async (req: Request, res: Response) => {
   try {
-    const bookId = req.params.bookId
+    const bookId = req.params.productId
     const product = { ...req.body, updatedAt: new Date() }
     const result = await BookService.updateBookIntoDB(bookId, product)
     res.status(200).json({
@@ -81,7 +81,7 @@ const updateBook = async (req: Request, res: Response) => {
 //controller for deleting a book
 const deleteBook = async (req: Request, res: Response) => {
   try {
-    const bookId = req.params.bookId
+    const bookId = req.params.productId
     const result = await BookService.deleteBookFromDB(bookId)
     if (result.deletedCount === 1) {
       res.status(200).json({
