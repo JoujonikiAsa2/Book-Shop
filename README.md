@@ -44,11 +44,11 @@ npm i
 ```bash
 NODE_ENV=development
 PORT=5000
-MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/<database>?retryWrites=true&w=majority
+DATABASE_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/<database>?retryWrites=true&w=majority
 ```
 5. Start the local Server:
 ```bash
-npm run start:dev
+npm run dev
 ```
 6. Test the API
 [http://localhost:5000/](http://localhost:5000/)
