@@ -1,8 +1,8 @@
 
 import express, { Application, Request, Response } from 'express'
 import cors from 'cors'
-import globalErrorHandler from './app/config/error.middleware'
 import router from './app/routes'
+import globalErrorHandler from './app/middlewares/globalErrorHandler'
 const app:Application = express()
 
 //middlewares

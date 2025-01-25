@@ -11,35 +11,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.orderController = void 0;
 const order_service_1 = require("./order.service");
-const createOrder = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const order = req.body;
-        const result = yield order_service_1.OrderService.createOrderIntoDB(order);
-        res.status(200).json({
-            message: 'Order created successfully',
-            status: true,
-            data: result
-        });
-    }
-    catch (err) {
-        next(err);
-    }
-});
-const getRevenue = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield order_service_1.OrderService.getRevenueFromDB();
-        res.status(200).json({
-            message: 'Revenue calculated successfully',
-            status: true,
-            data: {
-                totalRevenue: result
-            }
-        });
-    }
-    catch (err) {
-        next(err);
-    }
-});
+const asyncWrapper_1 = require("../../utils/asyncWrapper");
+const createOrder = (0, asyncWrapper_1.asyncWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const order = req.body;
+    const result = yield order_service_1.OrderService.createOrderIntoDB(order);
+    res.status(200).json({
+        message: 'Order created successfully',
+        status: true,
+        data: result
+    });
+}));
+const getRevenue = (0, asyncWrapper_1.asyncWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_service_1.OrderService.getRevenueFromDB();
+    res.status(200).json({
+        message: 'Revenue calculated successfully',
+        status: true,
+        data: {
+            totalRevenue: result
+        }
+    });
+}));
 exports.orderController = {
     getRevenue,
     createOrder
