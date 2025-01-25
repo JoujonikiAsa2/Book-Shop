@@ -1,0 +1,1 @@
+export const bookSearchFields = ['title', 'author', 'category']

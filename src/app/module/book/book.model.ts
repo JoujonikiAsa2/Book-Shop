@@ -36,7 +36,7 @@ const productSchema = new Schema<TBook>(
       min: [0, "Quantity must be a positive number"],
       required: [true, "Quantity is required"],
     },
-    inStock: {
+    availability: {
       type: Boolean,
     },
     createdAt: {

@@ -1,4 +1,4 @@
-import { Product } from '../products/book.model'
+import { Product } from '../book/book.model'
 import { TOrder } from './order.interface'
 import { Order } from './order.model'
 

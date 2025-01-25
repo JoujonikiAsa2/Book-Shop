@@ -19,22 +19,14 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 //controller for getting all books
 const getAllBooks = async (req: Request, res: Response) => {
   try {
-    const searchTerm = req.query.searchTerm as string
-    const result = searchTerm
-      ? await BookService.getAllBooksByCategory(searchTerm)
-      : await BookService.getAllBooksFromDB()
-    if (result.length > 0) {
-      res.status(200).json({
-        message: 'Books retrieved successfully',
-        status: true,
-        data: result,
-      })
-    } else {
-      res.status(404).json({
-        message: 'No books found',
-        status: false,
-      })
-    }
+    const query = req.query
+    const result = await BookService.getAllBooksFromDB(query)
+    res.status(200).json({
+      message: 'Book retrieved successfully',
+      status: true,
+      meta: result.meta,
+      data: result.result
+    })
   } catch (err: unknown) {
     res.send(err)
   }
