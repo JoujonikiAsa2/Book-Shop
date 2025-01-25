@@ -1,8 +1,8 @@
 import { BookService } from './book.service'
-import { asyncWrapper } from '../../utils/asyncWrapper'
+import { asyncHandler } from '../../utils/asyncHandler'
 
 //controller for creating a book
-const createBook = asyncWrapper(async (req, res) => {
+const createBook = asyncHandler(async (req, res) => {
 
   const product = req.body
   const result = await BookService.createBookIntoDB(product)
@@ -14,7 +14,7 @@ const createBook = asyncWrapper(async (req, res) => {
 })
 
 //controller for getting all books
-const getAllBooks = asyncWrapper(async (req, res) => {
+const getAllBooks = asyncHandler(async (req, res) => {
   const query = req.query
   const result = await BookService.getAllBooksFromDB(query)
   res.status(200).json({
@@ -26,7 +26,7 @@ const getAllBooks = asyncWrapper(async (req, res) => {
 })
 
 //controller for retrieves a single book
-const getBookById = asyncWrapper(async (req, res) => {
+const getBookById = asyncHandler(async (req, res) => {
   const bookId = req.params.productId
   const result = await BookService.getSignleBookFromDB(bookId)
   if (result) {
@@ -44,7 +44,7 @@ const getBookById = asyncWrapper(async (req, res) => {
 })
 
 //controller for updating a book details
-const updateBook = asyncWrapper(async (req, res) => {
+const updateBook = asyncHandler(async (req, res) => {
   const bookId = req.params.productId
   const product = { ...req.body, updatedAt: new Date() }
   const result = await BookService.updateBookIntoDB(bookId, product)
@@ -56,7 +56,7 @@ const updateBook = asyncWrapper(async (req, res) => {
 })
 
 //controller for deleting a book
-const deleteBook = asyncWrapper(async (req, res) => {
+const deleteBook = asyncHandler(async (req, res) => {
   const bookId = req.params.productId
   const result = await BookService.deleteBookFromDB(bookId)
   if (result.deletedCount === 1) {

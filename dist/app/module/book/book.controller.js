@@ -11,9 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookController = void 0;
 const book_service_1 = require("./book.service");
-const asyncWrapper_1 = require("../../utils/asyncWrapper");
+const asyncHandler_1 = require("../../utils/asyncHandler");
 //controller for creating a book
-const createBook = (0, asyncWrapper_1.asyncWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createBook = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const product = req.body;
     const result = yield book_service_1.BookService.createBookIntoDB(product);
     res.status(200).json({
@@ -23,7 +23,7 @@ const createBook = (0, asyncWrapper_1.asyncWrapper)((req, res) => __awaiter(void
     });
 }));
 //controller for getting all books
-const getAllBooks = (0, asyncWrapper_1.asyncWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllBooks = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = req.query;
     const result = yield book_service_1.BookService.getAllBooksFromDB(query);
     res.status(200).json({
@@ -34,7 +34,7 @@ const getAllBooks = (0, asyncWrapper_1.asyncWrapper)((req, res) => __awaiter(voi
     });
 }));
 //controller for retrieves a single book
-const getBookById = (0, asyncWrapper_1.asyncWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getBookById = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bookId = req.params.productId;
     const result = yield book_service_1.BookService.getSignleBookFromDB(bookId);
     if (result) {
@@ -52,7 +52,7 @@ const getBookById = (0, asyncWrapper_1.asyncWrapper)((req, res) => __awaiter(voi
     }
 }));
 //controller for updating a book details
-const updateBook = (0, asyncWrapper_1.asyncWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateBook = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bookId = req.params.productId;
     const product = Object.assign(Object.assign({}, req.body), { updatedAt: new Date() });
     const result = yield book_service_1.BookService.updateBookIntoDB(bookId, product);
@@ -63,7 +63,7 @@ const updateBook = (0, asyncWrapper_1.asyncWrapper)((req, res) => __awaiter(void
     });
 }));
 //controller for deleting a book
-const deleteBook = (0, asyncWrapper_1.asyncWrapper)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteBook = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bookId = req.params.productId;
     const result = yield book_service_1.BookService.deleteBookFromDB(bookId);
     if (result.deletedCount === 1) {
