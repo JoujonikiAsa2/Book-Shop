@@ -12,14 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = __importDefault(require("./app"));
-const mongoose_1 = __importDefault(require("mongoose"));
-const config_1 = __importDefault(require("./app/config"));
-const { port, database_url } = config_1.default;
-function main() {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield mongoose_1.default.connect(database_url);
-        app_1.default.listen(port, () => console.log(`Server is running on port ${port}`));
-    });
-}
-main();
+exports.userServices = void 0;
+const queryBuilder_1 = __importDefault(require("../../builder/queryBuilder"));
+const user_model_1 = require("./user.model");
+const createUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.User.create(payload);
+    return result;
+});
+const getAllUsers = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const userQuery = new queryBuilder_1.default(user_model_1.User.find({}), query).search(['name']);
+    const result = yield userQuery.modelQuery;
+    return result;
+});
+exports.userServices = {
+    getAllUsers,
+    createUser
+};

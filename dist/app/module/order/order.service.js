@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/no-require-imports */
-/* eslint-disable no-undef */
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -13,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderService = void 0;
-const book_model_1 = require("../products/book.model");
+const book_model_1 = require("../book/book.model");
 const order_model_1 = require("./order.model");
 const createOrderIntoDB = (order) => __awaiter(void 0, void 0, void 0, function* () {
     const product = yield book_model_1.Product.findById(order.product);
