@@ -5,4 +5,4 @@ const router = Router()
 router.post('/',userControllers.createUser)
 router.patch('/make-admin/:id',userControllers.makeAdmin)
 router.get('/',userControllers.getAllUser)
-export const userRoute = router
+export const userRoutes = router

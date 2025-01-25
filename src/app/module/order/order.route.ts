@@ -9,4 +9,4 @@ router.get("/:id", orderController.getOrderById)
 router.get("/revenue", orderController.getRevenue)
 
 
-export const orderRoute =  router
+export const orderRoutes =  router
