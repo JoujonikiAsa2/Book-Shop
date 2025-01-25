@@ -12,23 +12,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.orderController = void 0;
 const order_service_1 = require("./order.service");
 const asyncHandler_1 = require("../../utils/asyncHandler");
+const apiResponseHandler_1 = require("../../utils/apiResponseHandler");
 const createOrder = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const order = req.body;
     const result = yield order_service_1.OrderService.createOrderIntoDB(order);
-    res.status(200).json({
-        message: 'Order created successfully',
-        status: true,
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Order created successfully!',
         data: result
     });
 }));
 const getRevenue = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield order_service_1.OrderService.getRevenueFromDB();
-    res.status(200).json({
-        message: 'Revenue calculated successfully',
-        status: true,
-        data: {
-            totalRevenue: result
-        }
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Get revenue successfully!',
+        data: result
     });
 }));
 exports.orderController = {

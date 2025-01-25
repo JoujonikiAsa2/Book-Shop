@@ -19,6 +19,14 @@ const createUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.create(payload);
     return result;
 });
+const makeAdmin = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.User.findByIdAndUpdate({
+        _id: id,
+    }, {
+        role: 'admin',
+    }, { new: true });
+    return result;
+});
 const getAllUsers = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const userQuery = new queryBuilder_1.default(user_model_1.User.find({}), query).search(['name']);
     const result = yield userQuery.modelQuery;
@@ -26,5 +34,6 @@ const getAllUsers = (query) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.userServices = {
     getAllUsers,
-    createUser
+    createUser,
+    makeAdmin,
 };

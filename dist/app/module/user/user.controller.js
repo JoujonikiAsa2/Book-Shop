@@ -10,24 +10,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userControllers = void 0;
+const apiResponseHandler_1 = require("../../utils/apiResponseHandler");
 const asyncHandler_1 = require("../../utils/asyncHandler");
 const user_service_1 = require("./user.service");
 const createUser = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.body;
     const result = yield user_service_1.userServices.createUser(user);
-    res.status(200).json({
-        message: 'User create successfully',
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'User created successfully!',
         data: result,
+    });
+}));
+const makeAdmin = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = user_service_1.userServices.makeAdmin(req.params.id);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'User role updated successfully!',
+        data: result
     });
 }));
 const getAllUser = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = req.query;
     const result = yield user_service_1.userServices.getAllUsers(query);
-    res.status(200).json({
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'User retrieved successfully!',
         data: result,
     });
 }));
 exports.userControllers = {
     createUser,
     getAllUser,
+    makeAdmin
 };

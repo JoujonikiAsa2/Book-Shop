@@ -12,23 +12,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookController = void 0;
 const book_service_1 = require("./book.service");
 const asyncHandler_1 = require("../../utils/asyncHandler");
+const apiResponseHandler_1 = require("../../utils/apiResponseHandler");
 //controller for creating a book
 const createBook = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const product = req.body;
     const result = yield book_service_1.BookService.createBookIntoDB(product);
-    res.status(200).json({
-        status: true,
-        message: 'Book created successfully',
-        data: result,
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Book created successfully!',
+        data: result
     });
 }));
 //controller for getting all books
 const getAllBooks = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = req.query;
     const result = yield book_service_1.BookService.getAllBooksFromDB(query);
-    res.status(200).json({
-        message: 'Book retrieved successfully',
-        status: true,
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Book retrieved successfully!',
         meta: result.meta,
         data: result.result
     });
@@ -37,48 +40,35 @@ const getAllBooks = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(voi
 const getBookById = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bookId = req.params.productId;
     const result = yield book_service_1.BookService.getSignleBookFromDB(bookId);
-    if (result) {
-        res.status(200).json({
-            message: 'Book retrieved successfully',
-            status: true,
-            data: result,
-        });
-    }
-    else {
-        res.status(404).json({
-            message: 'No book found',
-            status: false,
-        });
-    }
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Book retrieved successfully!',
+        data: result
+    });
 }));
 //controller for updating a book details
 const updateBook = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bookId = req.params.productId;
     const product = Object.assign(Object.assign({}, req.body), { updatedAt: new Date() });
     const result = yield book_service_1.BookService.updateBookIntoDB(bookId, product);
-    res.status(200).json({
-        message: 'Book updated successfully',
-        status: true,
-        data: result,
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Book updated successfully!',
+        data: result
     });
 }));
 //controller for deleting a book
 const deleteBook = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bookId = req.params.productId;
     const result = yield book_service_1.BookService.deleteBookFromDB(bookId);
-    if (result.deletedCount === 1) {
-        res.status(200).json({
-            message: 'Book deleted successfully',
-            status: true,
-            data: {},
-        });
-    }
-    else {
-        res.status(404).json({
-            message: 'Opps! SOomething went wrong, Please try again',
-            status: false,
-        });
-    }
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Book deleted successfully!',
+        data: result
+    });
 }));
 //exporting controllers
 exports.BookController = {

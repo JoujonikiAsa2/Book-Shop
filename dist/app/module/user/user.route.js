@@ -5,5 +5,6 @@ const express_1 = require("express");
 const user_controller_1 = require("./user.controller");
 const router = (0, express_1.Router)();
 router.post('/', user_controller_1.userControllers.createUser);
+router.patch('/make-admin/:id', user_controller_1.userControllers.makeAdmin);
 router.get('/', user_controller_1.userControllers.getAllUser);
 exports.userRoute = router;

@@ -1,15 +1,17 @@
 import { BookService } from './book.service'
 import { asyncHandler } from '../../utils/asyncHandler'
+import { apiResponseHandler } from '../../utils/apiResponseHandler'
 
 //controller for creating a book
 const createBook = asyncHandler(async (req, res) => {
 
   const product = req.body
   const result = await BookService.createBookIntoDB(product)
-  res.status(200).json({
-    status: true,
-    message: 'Book created successfully',
-    data: result,
+  apiResponseHandler(res, {
+    statusCode: 200,
+    success:true,
+    message: 'Book created successfully!',
+    data:result
   })
 })
 
@@ -17,11 +19,12 @@ const createBook = asyncHandler(async (req, res) => {
 const getAllBooks = asyncHandler(async (req, res) => {
   const query = req.query
   const result = await BookService.getAllBooksFromDB(query)
-  res.status(200).json({
-    message: 'Book retrieved successfully',
-    status: true,
-    meta: result.meta,
-    data: result.result
+  apiResponseHandler(res, {
+    statusCode: 200,
+    success:true,
+    message: 'Book retrieved successfully!',
+    meta:result.meta,
+    data:result.result
   })
 })
 
@@ -29,18 +32,12 @@ const getAllBooks = asyncHandler(async (req, res) => {
 const getBookById = asyncHandler(async (req, res) => {
   const bookId = req.params.productId
   const result = await BookService.getSignleBookFromDB(bookId)
-  if (result) {
-    res.status(200).json({
-      message: 'Book retrieved successfully',
-      status: true,
-      data: result,
-    })
-  } else {
-    res.status(404).json({
-      message: 'No book found',
-      status: false,
-    })
-  }
+  apiResponseHandler(res, {
+    statusCode: 200,
+    success:true,
+    message: 'Book retrieved successfully!',
+    data:result
+  })
 })
 
 //controller for updating a book details
@@ -48,10 +45,11 @@ const updateBook = asyncHandler(async (req, res) => {
   const bookId = req.params.productId
   const product = { ...req.body, updatedAt: new Date() }
   const result = await BookService.updateBookIntoDB(bookId, product)
-  res.status(200).json({
-    message: 'Book updated successfully',
-    status: true,
-    data: result,
+  apiResponseHandler(res, {
+    statusCode: 200,
+    success:true,
+    message: 'Book updated successfully!',
+    data:result
   })
 })
 
@@ -59,18 +57,12 @@ const updateBook = asyncHandler(async (req, res) => {
 const deleteBook = asyncHandler(async (req, res) => {
   const bookId = req.params.productId
   const result = await BookService.deleteBookFromDB(bookId)
-  if (result.deletedCount === 1) {
-    res.status(200).json({
-      message: 'Book deleted successfully',
-      status: true,
-      data: {},
-    })
-  } else {
-    res.status(404).json({
-      message: 'Opps! SOomething went wrong, Please try again',
-      status: false,
-    })
-  }
+  apiResponseHandler(res, {
+    statusCode: 200,
+    success:true,
+    message: 'Book deleted successfully!',
+    data:result
+  })
 })
 
 //exporting controllers
