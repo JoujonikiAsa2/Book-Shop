@@ -12,19 +12,17 @@ const createBookIntoDB = async (product: TBook) => {
 
 //Retrieves all books from the database
 const getAllBooksFromDB = async (query: Partial<TUser>) => {
-  const bookQuery = new QueryBuilder(
-    Product.find(),
-    query,
-  )
+  const bookQuery = new QueryBuilder(Product.find(), query)
     .search(bookSearchFields)
     .filter()
     .sort()
+    .paginate()
 
   const result = await bookQuery.modelQuery
   const meta = await bookQuery.count()
   return {
     result: result,
-    meta: meta
+    meta: meta,
   }
 }
 

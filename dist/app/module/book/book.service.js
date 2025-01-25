@@ -26,12 +26,13 @@ const getAllBooksFromDB = (query) => __awaiter(void 0, void 0, void 0, function*
     const bookQuery = new queryBuilder_1.default(book_model_1.Product.find(), query)
         .search(book_constant_1.bookSearchFields)
         .filter()
-        .sort();
+        .sort()
+        .paginate();
     const result = yield bookQuery.modelQuery;
     const meta = yield bookQuery.count();
     return {
         result: result,
-        meta: meta
+        meta: meta,
     };
 });
 //Retrieves all books from the database by category

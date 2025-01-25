@@ -53,6 +53,14 @@ class QueryBuilder {
         this.modelQuery = this.modelQuery.sort(sort);
         return this;
     }
+    paginate() {
+        var _a, _b;
+        const page = Number((_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.page) | 1;
+        const limit = Number((_b = this === null || this === void 0 ? void 0 : this.query) === null || _b === void 0 ? void 0 : _b.limit) | 1;
+        const skip = (page - 1) * limit | 1;
+        this.modelQuery = this.modelQuery.skip(skip).limit(limit);
+        return this;
+    }
     count() {
         return __awaiter(this, void 0, void 0, function* () {
             const filter = this.modelQuery.getFilter();

@@ -1,17 +1,21 @@
+import QueryBuilder from '../../builder/queryBuilder'
+import AppError from '../../errors/AppError'
 import { Product } from '../book/book.model'
+import { orderSearchFields } from './order.constant'
 import { TOrder } from './order.interface'
 import { Order } from './order.model'
+import httpStatus from 'http-status'
 
 const createOrderIntoDB = async (order: TOrder) => {
   const product = await Product.findById(order.product)
 
   //throw relavant error
   if (!product) {
-    throw { message: 'Product not found', status: false }
+    throw new AppError('Product not found', httpStatus.NOT_FOUND)
   }
 
   if (product.quantity < order.quantity) {
-    throw { message: 'Insufficient stock', status: false }
+    throw new AppError('Insufficient stock', httpStatus.NOT_FOUND)
   }
 
   //it reduce the quantity
@@ -31,6 +35,25 @@ const createOrderIntoDB = async (order: TOrder) => {
   order.totalPrice = totalPrice
 
   const result = await Order.create(order)
+  return result
+}
+
+const getAllOrderFromDB = async (query: Record<string, unknown>) => {
+  const orderQuery = new QueryBuilder(Order.find(), query)
+    .search(orderSearchFields)
+    .filter()
+    .sort()
+    .paginate()
+  const result = await orderQuery.modelQuery
+  const meta = await orderQuery.count()
+  return {
+    result,
+    meta,
+  }
+}
+
+const getOrderByIdFromDB = async (id: string) => {
+  const result = Order.findById(id)
   return result
 }
 
@@ -64,6 +87,8 @@ const getRevenueFromDB = async () => {
 }
 
 export const OrderService = {
-  createOrderIntoDB,
   getRevenueFromDB,
+  createOrderIntoDB,
+  getAllOrderFromDB,
+  getOrderByIdFromDB,
 }

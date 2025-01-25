@@ -1,8 +1,8 @@
 import { FilterQuery, Query } from 'mongoose'
 
 class QueryBuilder<T> {
-  modelQuery: Query<T[], T>
-  query: Record<string, unknown>
+  public modelQuery: Query<T[], T>;
+  public query: Record<string, unknown>;
 
   constructor(modelQuery: Query<T[], T>, query: Record<string, unknown>) {
     this.modelQuery = modelQuery
@@ -47,6 +47,14 @@ class QueryBuilder<T> {
       (this?.query?.sort as string)?.split(',')?.join() || '-createdAt'
     this.modelQuery = this.modelQuery.sort(sort as string)
     return this
+  }
+
+  paginate() {
+    const page = Number(this?.query?.page) | 1;
+    const limit = Number(this?.query?.limit) | 1;
+    const skip = (page - 1) * limit | 1;
+    this.modelQuery = this.modelQuery.skip(skip).limit(limit);
+    return this;
   }
 
   async count() {

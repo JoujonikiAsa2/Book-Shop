@@ -23,6 +23,27 @@ const createOrder = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(voi
         data: result
     });
 }));
+const getAllOrders = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = req.query;
+    const result = yield order_service_1.OrderService.getAllOrderFromDB(query);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Orders retrieved successfully!',
+        data: result.result,
+        meta: result.meta
+    });
+}));
+const getOrderById = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const result = yield order_service_1.OrderService.getOrderByIdFromDB(id);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Order retrieved successfully!',
+        data: result
+    });
+}));
 const getRevenue = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield order_service_1.OrderService.getRevenueFromDB();
     (0, apiResponseHandler_1.apiResponseHandler)(res, {
@@ -34,5 +55,7 @@ const getRevenue = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void
 }));
 exports.orderController = {
     getRevenue,
-    createOrder
+    createOrder,
+    getAllOrders,
+    getOrderById
 };

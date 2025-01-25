@@ -13,6 +13,29 @@ const createOrder = asyncHandler(async (req,res) => {
      })
 })
 
+const getAllOrders = asyncHandler(async (req,res) => {
+    const query = req.query
+    const result = await OrderService.getAllOrderFromDB(query)
+   apiResponseHandler(res, {
+       statusCode: 200,
+       success:true,
+       message: 'Orders retrieved successfully!',
+       data:result.result,
+       meta:result.meta
+     })
+})
+
+const getOrderById = asyncHandler(async (req,res) => {
+    const id = req.params.id
+    const result = await OrderService.getOrderByIdFromDB(id)
+   apiResponseHandler(res, {
+       statusCode: 200,
+       success:true,
+       message: 'Order retrieved successfully!',
+       data:result
+     })
+})
+
 const getRevenue = asyncHandler(async (req,res) => {
     const result = await OrderService.getRevenueFromDB()
     apiResponseHandler(res, {
@@ -25,5 +48,7 @@ const getRevenue = asyncHandler(async (req,res) => {
 
 export const orderController = {
     getRevenue,
-    createOrder
+    createOrder,
+    getAllOrders,
+    getOrderById
 }

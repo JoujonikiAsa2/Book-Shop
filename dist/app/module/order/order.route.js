@@ -9,5 +9,7 @@ const order_controller_1 = require("./order.controller");
 const router = express_1.default.Router();
 //routes for orders
 router.post("/", order_controller_1.orderController.createOrder);
+router.get("/", order_controller_1.orderController.getAllOrders);
+router.get("/:id", order_controller_1.orderController.getOrderById);
 router.get("/revenue", order_controller_1.orderController.getRevenue);
 exports.orderRoute = router;
