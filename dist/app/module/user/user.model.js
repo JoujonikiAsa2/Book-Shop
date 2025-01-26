@@ -37,6 +37,14 @@ const userSchema = new mongoose_1.Schema({
         enum: ['user', 'admin'],
         default: 'user',
     },
+    isDeactivate: {
+        type: Boolean,
+        default: false,
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
 });
 userSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -54,7 +62,7 @@ userSchema.post('save', function (doc, next) {
 });
 userSchema.statics.isUserExists = function (email) {
     return __awaiter(this, void 0, void 0, function* () {
-        const existingUser = yield exports.User.findOne({ email: email }).select('+password');
+        const existingUser = yield exports.User.findOne({ email }).select('+password');
         return existingUser;
     });
 };

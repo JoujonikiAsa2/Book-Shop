@@ -18,22 +18,29 @@ const http_status_1 = __importDefault(require("http-status"));
 const asyncHandler_1 = require("../utils/asyncHandler");
 const auth_utils_1 = require("../module/auth/auth.utils");
 const config_1 = __importDefault(require("../config"));
+const user_model_1 = require("../module/user/user.model");
 const auth = (...requiredRoles) => {
     return (0, asyncHandler_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
         // check if the token send from client side
-        const token = req.headers.authorization;
+        const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
         if (!token) {
             throw new AppError_1.default('You are not Authorized', http_status_1.default.UNAUTHORIZED);
         }
         let decoded;
         try {
             // verify token
-            decoded = yield (0, auth_utils_1.verifyToken)(token, config_1.default.jwt_access_secret);
+            decoded = yield (0, auth_utils_1.verifyToken)(token, config_1.default.jwt.access_secret);
         }
         catch (err) {
             throw new AppError_1.default('Unauthorized', http_status_1.default.UNAUTHORIZED);
         }
-        const { userId, role, iat } = decoded;
+        const { email, role, iat } = decoded;
+        // checking if the user is exist
+        const userInfo = yield user_model_1.User.findOne({ email });
+        if (!userInfo) {
+            throw new AppError_1.default("This user is not found !", http_status_1.default.NOT_FOUND);
+        }
         if (requiredRoles && requiredRoles.includes(role)) {
             req.user = decoded;
         }

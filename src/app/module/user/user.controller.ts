@@ -1,27 +1,9 @@
+import AppError from '../../errors/AppError'
 import { apiResponseHandler } from '../../utils/apiResponseHandler'
 import { asyncHandler } from '../../utils/asyncHandler'
 import { userServices } from './user.service'
+import httpStatus from 'http-status'
 
-const createUser = asyncHandler(async (req, res) => {
-  const user = req.body
-  const result = await userServices.createUser(user)
-  apiResponseHandler(res, {
-    statusCode: 200,
-    success: true,
-    message: 'User created successfully!',
-    data: result,
-  })
-})
-
-const makeAdmin = asyncHandler(async (req, res) => {
-    const result = userServices.makeAdmin(req.params.id)
-    apiResponseHandler(res, {
-        statusCode: 200,
-        success:true,
-        message: 'User role updated successfully!',
-        data:result
-      })
-})
 
 const getAllUser = asyncHandler(async (req, res) => {
   const query = req.query
@@ -34,8 +16,24 @@ const getAllUser = asyncHandler(async (req, res) => {
   })
 })
 
+
+const getMe = asyncHandler(async (req, res) => {
+  const user = req.user;
+  if (!user) {
+    throw new AppError('Token not found', httpStatus.NOT_FOUND);
+  }
+
+  const { email, role } = user;
+  const result = await userServices.getMe(email, role);
+  apiResponseHandler(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User retrieved successfully',
+    data: result,
+  });
+});
+
 export const userControllers = {
-  createUser,
   getAllUser,
-  makeAdmin
+  getMe
 }

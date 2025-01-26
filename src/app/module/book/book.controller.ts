@@ -1,6 +1,7 @@
 import { BookService } from './book.service'
 import { asyncHandler } from '../../utils/asyncHandler'
 import { apiResponseHandler } from '../../utils/apiResponseHandler'
+import httpStatus from 'http-status'
 
 //controller for creating a book
 const createBook = asyncHandler(async (req, res) => {
@@ -8,7 +9,7 @@ const createBook = asyncHandler(async (req, res) => {
   const product = req.body
   const result = await BookService.createBookIntoDB(product)
   apiResponseHandler(res, {
-    statusCode: 200,
+    statusCode: httpStatus.CREATED,
     success:true,
     message: 'Book created successfully!',
     data:result
@@ -20,7 +21,7 @@ const getAllBooks = asyncHandler(async (req, res) => {
   const query = req.query
   const result = await BookService.getAllBooksFromDB(query)
   apiResponseHandler(res, {
-    statusCode: 200,
+    statusCode: httpStatus.OK,
     success:true,
     message: 'Book retrieved successfully!',
     meta:result.meta,
@@ -33,7 +34,7 @@ const getBookById = asyncHandler(async (req, res) => {
   const bookId = req.params.productId
   const result = await BookService.getSignleBookFromDB(bookId)
   apiResponseHandler(res, {
-    statusCode: 200,
+    statusCode: httpStatus.OK,
     success:true,
     message: 'Book retrieved successfully!',
     data:result
@@ -46,7 +47,7 @@ const updateBook = asyncHandler(async (req, res) => {
   const product = { ...req.body, updatedAt: new Date() }
   const result = await BookService.updateBookIntoDB(bookId, product)
   apiResponseHandler(res, {
-    statusCode: 200,
+    statusCode: httpStatus.OK,
     success:true,
     message: 'Book updated successfully!',
     data:result
@@ -58,7 +59,7 @@ const deleteBook = asyncHandler(async (req, res) => {
   const bookId = req.params.productId
   const result = await BookService.deleteBookFromDB(bookId)
   apiResponseHandler(res, {
-    statusCode: 200,
+    statusCode: httpStatus.OK,
     success:true,
     message: 'Book deleted successfully!',
     data:result

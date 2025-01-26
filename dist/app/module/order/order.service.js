@@ -15,30 +15,39 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderService = void 0;
 const queryBuilder_1 = __importDefault(require("../../builder/queryBuilder"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
-const book_model_1 = require("../book/book.model");
+// import { Product } from '../book/book.model'
+const user_model_1 = require("../user/user.model");
 const order_constant_1 = require("./order.constant");
 const order_model_1 = require("./order.model");
 const http_status_1 = __importDefault(require("http-status"));
-const createOrderIntoDB = (order) => __awaiter(void 0, void 0, void 0, function* () {
-    const product = yield book_model_1.Product.findById(order.product);
-    //throw relavant error
-    if (!product) {
-        throw new AppError_1.default('Product not found', http_status_1.default.NOT_FOUND);
+const book_model_1 = require("../book/book.model");
+const createOrderIntoDB = (user, payload, client_ip) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const userInfo = yield user_model_1.User.findOne({ email: user.email });
+    if (!userInfo) {
+        throw new AppError_1.default('User not found', http_status_1.default.NOT_FOUND);
     }
-    if (product.quantity < order.quantity) {
-        throw new AppError_1.default('Insufficient stock', http_status_1.default.NOT_FOUND);
+    if (!((_a = payload === null || payload === void 0 ? void 0 : payload.products) === null || _a === void 0 ? void 0 : _a.length)) {
+        throw new AppError_1.default('Order is not specified', http_status_1.default.NOT_ACCEPTABLE);
     }
-    //it reduce the quantity
-    const updatedQuantity = product.quantity - order.quantity;
-    yield book_model_1.Product.findByIdAndUpdate({ _id: order.product }, {
-        $set: {
-            quantity: updatedQuantity,
-            inStock: updatedQuantity > 0,
-        },
-    }, { new: true });
-    const totalPrice = product.price * order.quantity;
-    order.totalPrice = totalPrice;
-    const result = yield order_model_1.Order.create(order);
+    const products = payload.products;
+    let totalPrice = 0;
+    const productData = yield Promise.all(products.map((item) => __awaiter(void 0, void 0, void 0, function* () {
+        const product = yield book_model_1.Product.findById(item.product);
+        if (product) {
+            const subtotal = product ? (product.price || 0) * item.quantity : 0;
+            totalPrice += subtotal;
+            return item;
+        }
+    })));
+    const result = yield order_model_1.Order.create({
+        user: userInfo === null || userInfo === void 0 ? void 0 : userInfo._id,
+        products: productData,
+        totalPrice: totalPrice,
+        phone: payload.phone,
+        address: payload.address,
+        city: payload.city,
+    });
     return result;
 });
 const getAllOrderFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {

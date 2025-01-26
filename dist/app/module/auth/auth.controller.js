@@ -18,6 +18,15 @@ const http_status_1 = __importDefault(require("http-status"));
 const asyncHandler_1 = require("../../utils/asyncHandler");
 const auth_service_1 = require("./auth.service");
 const config_1 = __importDefault(require("../../config"));
+const registerUser = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield auth_service_1.authServices.registerUser(req.body);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: http_status_1.default.CREATED,
+        success: true,
+        message: 'User registered successfully',
+        data: result
+    });
+}));
 const loginUser = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.authServices.loginUser(req.body);
     const { accessToken, refreshToken } = result;
@@ -35,5 +44,6 @@ const loginUser = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 
     });
 }));
 exports.authControllers = {
-    loginUser,
+    registerUser,
+    loginUser
 };

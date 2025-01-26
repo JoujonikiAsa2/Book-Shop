@@ -4,7 +4,9 @@ export type TUser = {
     name:string,
     email:string,
     password: string,
-    role: 'user' | 'admin'
+    role: 'user' | 'admin',
+    isDeactivate: boolean,
+    isDeleted: boolean
 }
 
 export interface UserModel extends Model<TUser> {

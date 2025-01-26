@@ -1,41 +1,58 @@
-import mongoose, { Schema } from 'mongoose'
-import { TOrder } from './order.interface'
+import { Schema, model, Types } from 'mongoose';
 
-const ObjectId = Schema.Types.ObjectId
-
-export const orderSchema = new Schema<TOrder>({
-  email: {
-    type: String,
+const OrderSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User', 
     required: true,
-    validate: {
-      validator: function (email: string) {
-        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+  },
+  products: [
+    {
+      product: {
+        type: Types.ObjectId,
+        ref: 'Product',
+        required: true,
       },
-      message: 'Invalid email address',
-    }
-  },
-  product: {
-    type: ObjectId,
-    ref: 'Products',
-  },
-  quantity: {
-    type: Number,
-    min: [1, 'Quantity must be a positive number'],
-  },
+      quantity: {
+        type: Number,
+        required: true,
+        min: 1,
+      },
+    },
+  ],
   totalPrice: {
     type: Number,
-    default: 0,
+    required: true,
+    min: 0,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-    immutable: true,
+  status: {
+    type: String,
+    enum: ['Pending', 'Paid', 'Shipped', 'Completed', 'Cancelled'],
+    default: 'Pending',
   },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
+  transaction: {
+    id: String,
+    transactionStatus: String,
+    bank_status: String,
+    sp_code: String,
+    sp_message: String,
+    method: String,
+    date_time: String,
   },
-})
+  phone: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+}, {
+  timestamps: true, 
+});
 
-
-export const Order = mongoose.model<TOrder>('Orders', orderSchema)
+export const Order = model('Order', OrderSchema);

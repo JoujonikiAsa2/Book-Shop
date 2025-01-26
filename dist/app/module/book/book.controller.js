@@ -8,17 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookController = void 0;
 const book_service_1 = require("./book.service");
 const asyncHandler_1 = require("../../utils/asyncHandler");
 const apiResponseHandler_1 = require("../../utils/apiResponseHandler");
+const http_status_1 = __importDefault(require("http-status"));
 //controller for creating a book
 const createBook = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const product = req.body;
     const result = yield book_service_1.BookService.createBookIntoDB(product);
     (0, apiResponseHandler_1.apiResponseHandler)(res, {
-        statusCode: 200,
+        statusCode: http_status_1.default.CREATED,
         success: true,
         message: 'Book created successfully!',
         data: result
@@ -29,7 +33,7 @@ const getAllBooks = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(voi
     const query = req.query;
     const result = yield book_service_1.BookService.getAllBooksFromDB(query);
     (0, apiResponseHandler_1.apiResponseHandler)(res, {
-        statusCode: 200,
+        statusCode: http_status_1.default.OK,
         success: true,
         message: 'Book retrieved successfully!',
         meta: result.meta,
@@ -41,7 +45,7 @@ const getBookById = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(voi
     const bookId = req.params.productId;
     const result = yield book_service_1.BookService.getSignleBookFromDB(bookId);
     (0, apiResponseHandler_1.apiResponseHandler)(res, {
-        statusCode: 200,
+        statusCode: http_status_1.default.OK,
         success: true,
         message: 'Book retrieved successfully!',
         data: result
@@ -53,7 +57,7 @@ const updateBook = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void
     const product = Object.assign(Object.assign({}, req.body), { updatedAt: new Date() });
     const result = yield book_service_1.BookService.updateBookIntoDB(bookId, product);
     (0, apiResponseHandler_1.apiResponseHandler)(res, {
-        statusCode: 200,
+        statusCode: http_status_1.default.OK,
         success: true,
         message: 'Book updated successfully!',
         data: result
@@ -64,7 +68,7 @@ const deleteBook = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void
     const bookId = req.params.productId;
     const result = yield book_service_1.BookService.deleteBookFromDB(bookId);
     (0, apiResponseHandler_1.apiResponseHandler)(res, {
-        statusCode: 200,
+        statusCode: http_status_1.default.OK,
         success: true,
         message: 'Book deleted successfully!',
         data: result

@@ -4,6 +4,16 @@ import { asyncHandler } from "../../utils/asyncHandler";
 import { authServices } from "./auth.service";
 import config from "../../config";
 
+const registerUser = asyncHandler(async (req, res) => {
+  const result = await authServices.registerUser(req.body);
+  apiResponseHandler(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'User registered successfully',
+    data: result
+  });
+});
+
 const loginUser = asyncHandler(async (req, res) => {
     const result = await authServices.loginUser(req.body);
     const { accessToken, refreshToken } = result;
@@ -22,5 +32,6 @@ const loginUser = asyncHandler(async (req, res) => {
   });
 
   export const authControllers = {
-    loginUser,
+    registerUser,
+    loginUser
   };

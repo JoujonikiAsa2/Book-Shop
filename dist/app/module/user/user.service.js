@@ -15,25 +15,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userServices = void 0;
 const queryBuilder_1 = __importDefault(require("../../builder/queryBuilder"));
 const user_model_1 = require("./user.model");
-const createUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.User.create(payload);
-    return result;
-});
-const makeAdmin = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.User.findByIdAndUpdate({
-        _id: id,
-    }, {
-        role: 'admin',
-    }, { new: true });
-    return result;
-});
 const getAllUsers = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const userQuery = new queryBuilder_1.default(user_model_1.User.find({}), query).search(['name']);
     const result = yield userQuery.modelQuery;
     return result;
 });
+const getMe = (email, role) => __awaiter(void 0, void 0, void 0, function* () {
+    let result = null;
+    if (role === 'user') {
+        result = yield user_model_1.User.findOne({ email: email });
+    }
+    if (role === 'admin') {
+        result = yield user_model_1.User.findOne({ email: email });
+    }
+    return result;
+});
 exports.userServices = {
     getAllUsers,
-    createUser,
-    makeAdmin,
+    getMe
 };

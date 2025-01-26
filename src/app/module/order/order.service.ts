@@ -1,40 +1,51 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { JwtPayload } from 'jsonwebtoken'
 import QueryBuilder from '../../builder/queryBuilder'
 import AppError from '../../errors/AppError'
-import { Product } from '../book/book.model'
+// import { Product } from '../book/book.model'
+import { User } from '../user/user.model'
 import { orderSearchFields } from './order.constant'
 import { TOrder } from './order.interface'
 import { Order } from './order.model'
 import httpStatus from 'http-status'
+import { Product } from '../book/book.model'
 
-const createOrderIntoDB = async (order: TOrder) => {
-  const product = await Product.findById(order.product)
-
-  //throw relavant error
-  if (!product) {
-    throw new AppError('Product not found', httpStatus.NOT_FOUND)
+const createOrderIntoDB = async (
+  user: JwtPayload,
+  payload: Partial<TOrder>,
+  client_ip: string,
+) => {
+  const userInfo = await User.findOne({ email: user.email })
+  if (!userInfo) {
+    throw new AppError('User not found', httpStatus.NOT_FOUND)
+  }
+  if (!payload?.products?.length) {
+    throw new AppError('Order is not specified', httpStatus.NOT_ACCEPTABLE)
   }
 
-  if (product.quantity < order.quantity) {
-    throw new AppError('Insufficient stock', httpStatus.NOT_FOUND)
-  }
+  const products = payload.products
+  let totalPrice = 0
 
-  //it reduce the quantity
-  const updatedQuantity = product.quantity - order.quantity
-  await Product.findByIdAndUpdate(
-    { _id: order.product },
-    {
-      $set: {
-        quantity: updatedQuantity,
-        inStock: updatedQuantity > 0,
-      },
-    },
-    { new: true },
+  const productData = await Promise.all(
+    products.map(async item => {
+      const product = await Product.findById(item.product)
+      if (product) {
+        const subtotal = product ? (product.price || 0) * item.quantity : 0
+        totalPrice += subtotal
+        return item
+      }
+    }),
   )
 
-  const totalPrice = product.price * order.quantity
-  order.totalPrice = totalPrice
+  const result = await Order.create({
+    user: userInfo?._id,
+    products: productData,
+    totalPrice: totalPrice,
+    phone: payload.phone,
+    address: payload.address,
+    city: payload.city,
+  })
 
-  const result = await Order.create(order)
   return result
 }
 

@@ -18,9 +18,17 @@ const user_model_1 = require("../user/user.model");
 const http_status_1 = __importDefault(require("http-status"));
 const auth_utils_1 = require("./auth.utils");
 const config_1 = __importDefault(require("../../config"));
+const registerUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const isUserExist = yield user_model_1.User.isUserExists(payload.email);
+    if (isUserExist) {
+        throw new AppError_1.default('Email already exist', http_status_1.default.NOT_ACCEPTABLE);
+    }
+    const result = yield user_model_1.User.create(payload);
+    return result;
+});
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload;
-    const user = yield user_model_1.User.isUserExists(email);
+    const user = yield user_model_1.User.findOne({ email }).select("password email role");
     if (!user) {
         throw new AppError_1.default('Invalid User', http_status_1.default.NOT_FOUND);
     }
@@ -29,16 +37,17 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         throw new AppError_1.default('Invalid User', http_status_1.default.NOT_FOUND);
     }
     const jwtPayload = {
-        userEmail: user.email,
+        email: user.email,
         role: user === null || user === void 0 ? void 0 : user.role
     };
-    const accessToken = (0, auth_utils_1.createToken)(jwtPayload, config_1.default.jwt_access_secret, config_1.default.jwt_access_expire_in);
-    const refreshToken = (0, auth_utils_1.createToken)(jwtPayload, config_1.default.jwt_refresh_secret, config_1.default.jwt_refresh_expire_in);
+    const accessToken = (0, auth_utils_1.createToken)(jwtPayload, config_1.default.jwt.access_secret, config_1.default.jwt.access_expires_in);
+    const refreshToken = (0, auth_utils_1.createToken)(jwtPayload, config_1.default.jwt.refresh_secret, config_1.default.jwt.refresh_expires_in);
     return {
         accessToken,
         refreshToken,
     };
 });
 exports.authServices = {
+    registerUser,
     loginUser,
 };

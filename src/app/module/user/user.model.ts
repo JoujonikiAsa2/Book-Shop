@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose'
 import { TUser, UserModel } from './user.interface'
 import bcrypt from 'bcrypt'
-import config from '../../config';
+import config from '../../config'
 
 const userSchema = new Schema<TUser>({
   name: {
@@ -24,19 +24,26 @@ const userSchema = new Schema<TUser>({
     enum: ['user', 'admin'],
     default: 'user',
   },
+  isDeactivate: {
+    type: Boolean,
+    default: false,
+  },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 userSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this; // doc
+  const user = this // doc
   // hashing password and save into DB
   user.password = await bcrypt.hash(
     user.password,
     Number(config.bcrypt_salt_rounds),
-  );
-  next();
-});
-
+  )
+  next()
+})
 
 // set '' after saving password
 userSchema.post('save', function (doc, next) {
@@ -45,7 +52,7 @@ userSchema.post('save', function (doc, next) {
 })
 
 userSchema.statics.isUserExists = async function (email: string) {
-  const existingUser = await User.findOne({ email: email }).select('+password')
+  const existingUser = await User.findOne({email}).select('+password')
   return existingUser
 }
 
