@@ -27,6 +27,16 @@ const createOrder = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(voi
         data: result
     });
 }));
+const verifyPayment = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('I am in verify order');
+    const verifiedPayment = yield order_service_1.OrderService.verifyPayment(req.query.order_id);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: http_status_1.default.CREATED,
+        success: true,
+        message: "Order verified successfully",
+        data: verifiedPayment,
+    });
+}));
 const getAllOrders = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = req.query;
     const result = yield order_service_1.OrderService.getAllOrderFromDB(query);
@@ -36,6 +46,15 @@ const getAllOrders = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(vo
         message: 'Orders retrieved successfully!',
         data: result.result,
         meta: result.meta
+    });
+}));
+const getOrdersByUserId = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_service_1.OrderService.getOrdersByUserIdFromDB(req.params.userId);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'User orders retrieved successfully!',
+        data: result
     });
 }));
 const getOrderById = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -48,18 +67,10 @@ const getOrderById = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(vo
         data: result
     });
 }));
-const getRevenue = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield order_service_1.OrderService.getRevenueFromDB();
-    (0, apiResponseHandler_1.apiResponseHandler)(res, {
-        statusCode: http_status_1.default.OK,
-        success: true,
-        message: 'Get revenue successfully!',
-        data: result
-    });
-}));
 exports.orderController = {
-    getRevenue,
     createOrder,
+    verifyPayment,
     getAllOrders,
-    getOrderById
+    getOrderById,
+    getOrdersByUserId
 };

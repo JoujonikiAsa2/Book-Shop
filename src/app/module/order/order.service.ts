@@ -9,12 +9,14 @@ import { TOrder } from './order.interface'
 import { Order } from './order.model'
 import httpStatus from 'http-status'
 import { Product } from '../book/book.model'
+import { orderUtils } from './order.utils'
 
 const createOrderIntoDB = async (
   user: JwtPayload,
   payload: Partial<TOrder>,
   client_ip: string,
 ) => {
+  console.log(user)
   const userInfo = await User.findOne({ email: user.email })
   if (!userInfo) {
     throw new AppError('User not found', httpStatus.NOT_FOUND)
@@ -37,7 +39,7 @@ const createOrderIntoDB = async (
     }),
   )
 
-  const result = await Order.create({
+  let order = await Order.create({
     user: userInfo?._id,
     products: productData,
     totalPrice: totalPrice,
@@ -46,7 +48,57 @@ const createOrderIntoDB = async (
     city: payload.city,
   })
 
-  return result
+  //payment intregation
+  const shurjopayPayload = {
+    amount: totalPrice,
+    order_id: order?._id,
+    currency: 'BDT',
+    customer_name: userInfo?.name,
+    customer_phone: payload.phone,
+    customer_email: user?.email,
+    customer_address: payload.address,
+    customer_city: payload.city,
+    client_ip: client_ip,
+  }
+
+  const payment = await orderUtils.makePayment(shurjopayPayload)
+
+  if (payment?.transactionStatus) {
+    order = await order.updateOne({
+      transaction: {
+        id: payment.sp_order_id,
+        transactionStatus: payment.transactionStatus,
+      },
+    })
+  }
+  return payment.checkout_url
+}
+
+const verifyPayment = async (order_id: string) => {
+  const verifiedPayment = await orderUtils.verifyPaymentAsync(order_id)
+  console.log(verifiedPayment)
+  if (verifiedPayment) {
+    await Order.findOneAndUpdate(
+      { 'transaction.id': order_id },
+      {
+        'transaction.bank_status': verifiedPayment[0].bank_status,
+        'transaction.sp_code': verifiedPayment[0].sp_code,
+        'transaction.sp_message': verifiedPayment[0].sp_message,
+        'transaction.transactionStatus': verifiedPayment[0].transaction_status,
+        'transaction.method': verifiedPayment[0].method,
+        'transaction.date_time': verifiedPayment[0].date_time,
+        status:
+          verifiedPayment[0].bank_status == 'Success'
+            ? 'Paid'
+            : verifiedPayment[0].bank_status == 'Failed'
+              ? 'Pending'
+              : verifiedPayment[0].bank_status == 'Cancel'
+                ? 'Cancelled'
+                : '',
+      },
+    )
+  }
+  return verifiedPayment
 }
 
 const getAllOrderFromDB = async (query: Record<string, unknown>) => {
@@ -63,43 +115,21 @@ const getAllOrderFromDB = async (query: Record<string, unknown>) => {
   }
 }
 
+const getOrdersByUserIdFromDB = async (userId: string) => {
+  const result = await Order.find({user: userId})
+  return result
+}
+
 const getOrderByIdFromDB = async (id: string) => {
   const result = Order.findById(id)
   return result
 }
 
-const getRevenueFromDB = async () => {
-  const result = await Order.aggregate([
-    {
-      $lookup: {
-        from: 'products',
-        localField: 'product',
-        foreignField: '_id',
-        as: 'productDetails',
-      },
-    },
-    {
-      $unwind: '$productDetails',
-    },
-    {
-      $addFields: {
-        revenue: { $multiply: ['$quantity', '$productDetails.price'] },
-      },
-    },
-    {
-      $group: {
-        _id: null,
-        totalRevenue: { $sum: '$revenue' },
-      },
-    },
-  ])
-
-  return result.length > 0 ? result[0].totalRevenue : 0
-}
 
 export const OrderService = {
-  getRevenueFromDB,
   createOrderIntoDB,
+  verifyPayment,
   getAllOrderFromDB,
   getOrderByIdFromDB,
+  getOrdersByUserIdFromDB
 }

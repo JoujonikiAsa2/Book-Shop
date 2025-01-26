@@ -14,6 +14,17 @@ const createOrder = asyncHandler(async (req,res) => {
      })
 })
 
+const verifyPayment = asyncHandler(async (req, res) => {
+    console.log('I am in verify order')
+    const verifiedPayment = await OrderService.verifyPayment(req.query.order_id as string);
+    apiResponseHandler(res, {
+      statusCode: httpStatus.CREATED,
+      success:true,
+      message: "Order verified successfully",
+      data: verifiedPayment,
+    });
+  });
+
 const getAllOrders = asyncHandler(async (req,res) => {
     const query = req.query
     const result = await OrderService.getAllOrderFromDB(query)
@@ -23,6 +34,16 @@ const getAllOrders = asyncHandler(async (req,res) => {
        message: 'Orders retrieved successfully!',
        data:result.result,
        meta:result.meta
+     })
+})
+
+const getOrdersByUserId = asyncHandler(async (req,res) => {
+    const result = await OrderService.getOrdersByUserIdFromDB(req.params.userId)
+   apiResponseHandler(res, {
+       statusCode: httpStatus.OK,
+       success:true,
+       message: 'User orders retrieved successfully!',
+       data:result
      })
 })
 
@@ -37,19 +58,10 @@ const getOrderById = asyncHandler(async (req,res) => {
      })
 })
 
-const getRevenue = asyncHandler(async (req,res) => {
-    const result = await OrderService.getRevenueFromDB()
-    apiResponseHandler(res, {
-        statusCode: httpStatus.OK,
-        success:true,
-        message: 'Get revenue successfully!',
-        data:result
-    })
-})
-
 export const orderController = {
-    getRevenue,
     createOrder,
+    verifyPayment,
     getAllOrders,
-    getOrderById
+    getOrderById,
+    getOrdersByUserId
 }

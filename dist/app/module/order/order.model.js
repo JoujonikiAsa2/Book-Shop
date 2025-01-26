@@ -29,7 +29,7 @@ const OrderSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Paid', 'Shipped', 'Completed', 'Cancelled'],
+        enum: ['Pending', 'Paid', 'Cancelled'],
         default: 'Pending',
     },
     transaction: {

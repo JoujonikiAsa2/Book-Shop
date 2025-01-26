@@ -6,8 +6,8 @@ const router = express.Router();
 
 //routes for book
 router.post("/", auth(USER_ROLE.admin), BookController.createBook)
-router.get("/",auth(USER_ROLE.user), auth(USER_ROLE.admin), BookController.getAllBooks)
-router.get("/:productId",auth(USER_ROLE.user), auth(USER_ROLE.admin), BookController.getBookById)
+router.get("/",auth(USER_ROLE.user,USER_ROLE.admin), BookController.getAllBooks)
+router.get("/:productId",auth(USER_ROLE.user,USER_ROLE.admin), BookController.getBookById)
 router.put("/:productId",auth(USER_ROLE.admin), BookController.updateBook)
 router.delete("/:productId", auth(USER_ROLE.admin), BookController.deleteBook)
 

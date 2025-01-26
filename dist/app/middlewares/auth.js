@@ -43,6 +43,7 @@ const auth = (...requiredRoles) => {
         }
         if (requiredRoles && requiredRoles.includes(role)) {
             req.user = decoded;
+            console.log('req.user', req.user);
         }
         else {
             throw new AppError_1.default('You are not Authorized', http_status_1.default.UNAUTHORIZED);

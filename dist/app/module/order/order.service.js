@@ -21,8 +21,10 @@ const order_constant_1 = require("./order.constant");
 const order_model_1 = require("./order.model");
 const http_status_1 = __importDefault(require("http-status"));
 const book_model_1 = require("../book/book.model");
+const order_utils_1 = require("./order.utils");
 const createOrderIntoDB = (user, payload, client_ip) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
+    console.log(user);
     const userInfo = yield user_model_1.User.findOne({ email: user.email });
     if (!userInfo) {
         throw new AppError_1.default('User not found', http_status_1.default.NOT_FOUND);
@@ -40,7 +42,7 @@ const createOrderIntoDB = (user, payload, client_ip) => __awaiter(void 0, void 0
             return item;
         }
     })));
-    const result = yield order_model_1.Order.create({
+    let order = yield order_model_1.Order.create({
         user: userInfo === null || userInfo === void 0 ? void 0 : userInfo._id,
         products: productData,
         totalPrice: totalPrice,
@@ -48,7 +50,50 @@ const createOrderIntoDB = (user, payload, client_ip) => __awaiter(void 0, void 0
         address: payload.address,
         city: payload.city,
     });
-    return result;
+    //payment intregation
+    const shurjopayPayload = {
+        amount: totalPrice,
+        order_id: order === null || order === void 0 ? void 0 : order._id,
+        currency: 'BDT',
+        customer_name: userInfo === null || userInfo === void 0 ? void 0 : userInfo.name,
+        customer_phone: payload.phone,
+        customer_email: user === null || user === void 0 ? void 0 : user.email,
+        customer_address: payload.address,
+        customer_city: payload.city,
+        client_ip: client_ip,
+    };
+    const payment = yield order_utils_1.orderUtils.makePayment(shurjopayPayload);
+    if (payment === null || payment === void 0 ? void 0 : payment.transactionStatus) {
+        order = yield order.updateOne({
+            transaction: {
+                id: payment.sp_order_id,
+                transactionStatus: payment.transactionStatus,
+            },
+        });
+    }
+    return payment.checkout_url;
+});
+const verifyPayment = (order_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const verifiedPayment = yield order_utils_1.orderUtils.verifyPaymentAsync(order_id);
+    console.log(verifiedPayment);
+    if (verifiedPayment) {
+        yield order_model_1.Order.findOneAndUpdate({ 'transaction.id': order_id }, {
+            'transaction.bank_status': verifiedPayment[0].bank_status,
+            'transaction.sp_code': verifiedPayment[0].sp_code,
+            'transaction.sp_message': verifiedPayment[0].sp_message,
+            'transaction.transactionStatus': verifiedPayment[0].transaction_status,
+            'transaction.method': verifiedPayment[0].method,
+            'transaction.date_time': verifiedPayment[0].date_time,
+            status: verifiedPayment[0].bank_status == 'Success'
+                ? 'Paid'
+                : verifiedPayment[0].bank_status == 'Failed'
+                    ? 'Pending'
+                    : verifiedPayment[0].bank_status == 'Cancel'
+                        ? 'Cancelled'
+                        : '',
+        });
+    }
+    return verifiedPayment;
 });
 const getAllOrderFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const orderQuery = new queryBuilder_1.default(order_model_1.Order.find(), query)
@@ -63,40 +108,18 @@ const getAllOrderFromDB = (query) => __awaiter(void 0, void 0, void 0, function*
         meta,
     };
 });
+const getOrdersByUserIdFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_model_1.Order.find({ user: userId });
+    return result;
+});
 const getOrderByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = order_model_1.Order.findById(id);
     return result;
 });
-const getRevenueFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield order_model_1.Order.aggregate([
-        {
-            $lookup: {
-                from: 'products',
-                localField: 'product',
-                foreignField: '_id',
-                as: 'productDetails',
-            },
-        },
-        {
-            $unwind: '$productDetails',
-        },
-        {
-            $addFields: {
-                revenue: { $multiply: ['$quantity', '$productDetails.price'] },
-            },
-        },
-        {
-            $group: {
-                _id: null,
-                totalRevenue: { $sum: '$revenue' },
-            },
-        },
-    ]);
-    return result.length > 0 ? result[0].totalRevenue : 0;
-});
 exports.OrderService = {
-    getRevenueFromDB,
     createOrderIntoDB,
+    verifyPayment,
     getAllOrderFromDB,
     getOrderByIdFromDB,
+    getOrdersByUserIdFromDB
 };

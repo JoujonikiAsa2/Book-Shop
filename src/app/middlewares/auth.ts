@@ -32,8 +32,10 @@ const auth = (...requiredRoles: TUserRole[]) => {
       throw new AppError("This user is not found !", httpStatus.NOT_FOUND);
     }
 
+
     if (requiredRoles && requiredRoles.includes(role)) {
       req.user = decoded as JwtPayload
+      console.log('req.user',req.user)
     } else {
       throw new AppError('You are not Authorized', httpStatus.UNAUTHORIZED)
     }

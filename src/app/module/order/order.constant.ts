@@ -1,1 +1,1 @@
-export const orderSearchFields = ['name']
+export const orderSearchFields = ['phone', 'transaction.id', 'status']
