@@ -7,6 +7,9 @@ const productSchema = new Schema<TBook>(
     title: {
       type: String,
     },
+    imgUrl:{
+      type:String,
+    },
     author: {
       type: String,
     },

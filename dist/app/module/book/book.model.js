@@ -7,6 +7,9 @@ const productSchema = new mongoose_1.Schema({
     title: {
         type: String,
     },
+    imgUrl: {
+        type: String,
+    },
     author: {
         type: String,
     },

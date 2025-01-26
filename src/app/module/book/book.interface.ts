@@ -2,6 +2,7 @@
 export type TBook = {
   title: string
   author: string
+  imgUrl: string
   price: number
   category: 'Fiction' | 'Science' | 'SelfDevelopment' | 'Poetry' | 'Religious'
   description: string
