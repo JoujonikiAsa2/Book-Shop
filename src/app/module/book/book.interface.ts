@@ -1,6 +1,6 @@
 //Interface for products
 export type TBook = {
-  title: string
+  name: string
   author: string
   imgUrl: string
   price: number

@@ -4,7 +4,7 @@ import { TBook } from './book.interface'
 //Creates a book schema
 const productSchema = new Schema<TBook>(
   {
-    title: {
+    name: {
       type: String,
     },
     imgUrl:{
