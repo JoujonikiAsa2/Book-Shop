@@ -42,7 +42,17 @@ const getMe = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, v
         data: result,
     });
 }));
+const updateProfile = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.userServices.updateProfile(req.params.id, req.body);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Profile updated successfully!',
+        data: result,
+    });
+}));
 exports.userControllers = {
     getAllUser,
-    getMe
+    getMe,
+    updateProfile
 };

@@ -33,7 +33,19 @@ const getMe = asyncHandler(async (req, res) => {
   });
 });
 
+const updateProfile = asyncHandler(async (req, res) => {
+  const result = await userServices.updateProfile(req.params.id, req.body)
+  apiResponseHandler(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Profile updated successfully!',
+    data: result,
+  })
+})
+
+
 export const userControllers = {
   getAllUser,
-  getMe
+  getMe,
+  updateProfile
 }

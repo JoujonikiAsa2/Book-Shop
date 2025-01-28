@@ -20,7 +20,15 @@ const getMe = async (email: string, role: string) => {
   return result;
 };
 
+const updateProfile = async (id: string, payload: Record<string, unknown>) => {
+  const result = await User.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  })
+  return result
+}
+
 export const userServices = {
   getAllUsers,
-  getMe
+  getMe,
+  updateProfile
 }

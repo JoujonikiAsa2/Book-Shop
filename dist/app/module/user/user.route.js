@@ -11,4 +11,5 @@ const auth_1 = __importDefault(require("../../middlewares/auth"));
 const router = (0, express_1.Router)();
 router.get('/', (0, auth_1.default)(user_constant_1.USER_ROLE.admin), user_controller_1.userControllers.getAllUser);
 router.get('/me', (0, auth_1.default)(user_constant_1.USER_ROLE.user), user_controller_1.userControllers.getMe);
+router.patch('/update-profile/:id', (0, auth_1.default)(user_constant_1.USER_ROLE.user, user_constant_1.USER_ROLE.admin), user_controller_1.userControllers.getAllUser);
 exports.userRoutes = router;

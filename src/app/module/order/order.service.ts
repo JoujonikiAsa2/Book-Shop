@@ -16,7 +16,6 @@ const createOrderIntoDB = async (
   payload: Partial<TOrder>,
   client_ip: string,
 ) => {
-  console.log(user)
   const userInfo = await User.findOne({ email: user.email })
   if (!userInfo) {
     throw new AppError('User not found', httpStatus.NOT_FOUND)
@@ -76,7 +75,6 @@ const createOrderIntoDB = async (
 
 const verifyPayment = async (order_id: string) => {
   const verifiedPayment = await orderUtils.verifyPaymentAsync(order_id)
-  console.log(verifiedPayment)
   if (verifiedPayment) {
     await Order.findOneAndUpdate(
       { 'transaction.id': order_id },

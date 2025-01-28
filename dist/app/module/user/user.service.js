@@ -30,7 +30,14 @@ const getMe = (email, role) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
+const updateProfile = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.User.findOneAndUpdate({ _id: id }, payload, {
+        new: true,
+    });
+    return result;
+});
 exports.userServices = {
     getAllUsers,
-    getMe
+    getMe,
+    updateProfile
 };

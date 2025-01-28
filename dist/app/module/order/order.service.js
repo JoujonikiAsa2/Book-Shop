@@ -24,7 +24,6 @@ const book_model_1 = require("../book/book.model");
 const order_utils_1 = require("./order.utils");
 const createOrderIntoDB = (user, payload, client_ip) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    console.log(user);
     const userInfo = yield user_model_1.User.findOne({ email: user.email });
     if (!userInfo) {
         throw new AppError_1.default('User not found', http_status_1.default.NOT_FOUND);
@@ -75,7 +74,6 @@ const createOrderIntoDB = (user, payload, client_ip) => __awaiter(void 0, void 0
 });
 const verifyPayment = (order_id) => __awaiter(void 0, void 0, void 0, function* () {
     const verifiedPayment = yield order_utils_1.orderUtils.verifyPaymentAsync(order_id);
-    console.log(verifiedPayment);
     if (verifiedPayment) {
         yield order_model_1.Order.findOneAndUpdate({ 'transaction.id': order_id }, {
             'transaction.bank_status': verifiedPayment[0].bank_status,
