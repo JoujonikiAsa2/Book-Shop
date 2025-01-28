@@ -43,7 +43,49 @@ const loginUser = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 
         },
     });
 }));
+const refreshToken = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield auth_service_1.authServices.refreshToken(req.body);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Refresh token generated successfully',
+        data: result
+    });
+}));
+const changePassword = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield auth_service_1.authServices.changePassword(req.user, req.body);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Password changed successfully',
+        data: result
+    });
+}));
+const forgetPassword = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield auth_service_1.authServices.forgetPassword(req.body.email);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Reset Password link send to your email',
+        data: result
+    });
+}));
+const resetPassword = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
+    const result = yield auth_service_1.authServices.resetPassword(req.body, token);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Password reset successfully',
+        data: result,
+    });
+}));
 exports.authControllers = {
     registerUser,
-    loginUser
+    loginUser,
+    refreshToken,
+    changePassword,
+    forgetPassword,
+    resetPassword
 };

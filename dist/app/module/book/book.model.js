@@ -4,7 +4,7 @@ exports.Product = void 0;
 const mongoose_1 = require("mongoose");
 //Creates a book schema
 const productSchema = new mongoose_1.Schema({
-    title: {
+    name: {
         type: String,
     },
     imgUrl: {

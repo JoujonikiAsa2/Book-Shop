@@ -12,6 +12,9 @@ exports.default = {
     database_url: process.env.DATABASE_URL,
     bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
     default_password: process.env.DEFAULT_PASS,
+    resetpass_ui_link: process.env.RESETPASS_UI_LINK,
+    nodemailer_email: process.env.EMAIL,
+    nodemailer_password: process.env.PASSWORD,
     jwt: {
         access_secret: process.env.JWT_ACCESS_SECRET,
         refresh_secret: process.env.JWT_REFRESH_SECRET,
