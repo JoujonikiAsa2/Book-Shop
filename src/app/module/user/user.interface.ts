@@ -2,6 +2,7 @@ import { Model } from "mongoose";
 
 export type TUser = {
     name:string,
+    phone: string,
     email:string,
     password: string,
     role: 'user' | 'admin',

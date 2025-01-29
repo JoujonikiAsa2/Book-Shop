@@ -36,7 +36,8 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         throw new AppError_1.default('Invalid username or password', http_status_1.default.NOT_FOUND);
     }
     const jwtPayload = {
-        email: user.email,
+        user: user === null || user === void 0 ? void 0 : user._id.toString(),
+        email: user === null || user === void 0 ? void 0 : user.email,
         role: user === null || user === void 0 ? void 0 : user.role,
     };
     const accessToken = (0, auth_utils_1.createToken)(jwtPayload, config_1.default.jwt.access_secret, config_1.default.jwt.access_expires_in);
@@ -52,8 +53,9 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = decoded;
     const user = yield (0, auth_utils_1.validateUser)(email);
     const jwtPayload = {
-        email: user.email,
-        role: user.role,
+        user: user === null || user === void 0 ? void 0 : user._id.toString(),
+        email: user === null || user === void 0 ? void 0 : user.email,
+        role: user === null || user === void 0 ? void 0 : user.role,
     };
     const accessToken = (0, auth_utils_1.createToken)(jwtPayload, config_1.default.jwt.access_secret, config_1.default.jwt.access_expires_in);
     return {
@@ -74,8 +76,9 @@ const changePassword = (userInfo, payload) => __awaiter(void 0, void 0, void 0, 
 const forgetPassword = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield (0, auth_utils_1.validateUser)(email);
     const jwtPayload = {
-        email: user.email,
-        role: user.role,
+        user: user === null || user === void 0 ? void 0 : user._id.toString(),
+        email: user === null || user === void 0 ? void 0 : user.email,
+        role: user === null || user === void 0 ? void 0 : user.role,
     };
     const resetToken = (0, auth_utils_1.createToken)(jwtPayload, config_1.default.jwt.access_secret, '10m');
     const resetURLlink = `${config_1.default.resetpass_ui_link}?id=${user.id}&token=${resetToken}`;

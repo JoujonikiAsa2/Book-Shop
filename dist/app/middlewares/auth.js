@@ -35,10 +35,11 @@ const auth = (...requiredRoles) => {
         catch (err) {
             throw new AppError_1.default('Unauthorized', http_status_1.default.UNAUTHORIZED);
         }
-        const { email, role, iat } = decoded;
+        const { user, email, role, iat } = decoded;
         // checking if the user is exist
         const userInfo = yield user_model_1.User.findOne({ email });
         if (!userInfo) {
+            console.log("This user is not found !");
             throw new AppError_1.default("This user is not found !", http_status_1.default.NOT_FOUND);
         }
         if (requiredRoles && requiredRoles.includes(role)) {
@@ -48,6 +49,7 @@ const auth = (...requiredRoles) => {
         else {
             throw new AppError_1.default('You are not Authorized', http_status_1.default.UNAUTHORIZED);
         }
+        console.log('i am here');
         next();
     }));
 };

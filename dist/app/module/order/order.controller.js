@@ -28,7 +28,6 @@ const createOrder = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(voi
     });
 }));
 const verifyPayment = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('I am in verify order');
     const verifiedPayment = yield order_service_1.OrderService.verifyPayment(req.query.order_id);
     (0, apiResponseHandler_1.apiResponseHandler)(res, {
         statusCode: http_status_1.default.CREATED,

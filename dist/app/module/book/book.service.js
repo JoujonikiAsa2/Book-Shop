@@ -27,6 +27,7 @@ const getAllBooksFromDB = (query) => __awaiter(void 0, void 0, void 0, function*
         .search(book_constant_1.bookSearchFields)
         .filter()
         .priceRange()
+        .filterAvailability()
         .sort()
         .paginate();
     const result = yield bookQuery.modelQuery;

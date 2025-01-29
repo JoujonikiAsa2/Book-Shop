@@ -4,7 +4,7 @@ import AppError from '../../errors/AppError';
 import httpStatus from 'http-status'
 
 export const createToken =  (
-  jwtPayload: { email: string; role: string },
+  jwtPayload: { user: string; email: string; role: string },
   secret: string,
   expiresIn: string,
 ) => {

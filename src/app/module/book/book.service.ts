@@ -15,6 +15,7 @@ const getAllBooksFromDB = async (query: Record<string, unknown>) => {
     .search(bookSearchFields)
     .filter()
     .priceRange()
+    .filterAvailability()
     .sort()
     .paginate()
 
@@ -46,7 +47,6 @@ const deleteBookFromDB = async (bookId: string) => {
   const result = await Product.deleteOne({ _id: bookId })
   return result
 }
-
 
 export const BookService = {
   createBookIntoDB,

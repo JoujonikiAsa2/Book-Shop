@@ -54,6 +54,15 @@ class QueryBuilder<T> {
     return this;
   }
 
+  filterAvailability(){
+    if(this?.query?.availability){
+      this.modelQuery = this.modelQuery.find({
+        availability: true
+      })
+    }
+    return this
+  }
+
   sort() {
     const sort =
       (this?.query?.sort as string)?.split(',')?.join(' ') || '-createdAt';
