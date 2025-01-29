@@ -6,16 +6,20 @@ const mongoose_1 = require("mongoose");
 const productSchema = new mongoose_1.Schema({
     name: {
         type: String,
+        required: true
     },
     imgUrl: {
         type: String,
+        required: true
     },
     author: {
         type: String,
+        required: true
     },
     price: {
         type: Number,
         min: [0, "Price must be a positive number"],
+        required: true
     },
     category: {
         type: String,

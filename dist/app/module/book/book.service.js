@@ -23,9 +23,10 @@ const createBookIntoDB = (product) => __awaiter(void 0, void 0, void 0, function
 });
 //Retrieves all books from the database
 const getAllBooksFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const bookQuery = new queryBuilder_1.default(book_model_1.Product.find(), query)
+    const bookQuery = new queryBuilder_1.default(book_model_1.Product.find({}), query)
         .search(book_constant_1.bookSearchFields)
         .filter()
+        .priceRange()
         .sort()
         .paginate();
     const result = yield bookQuery.modelQuery;
@@ -34,17 +35,6 @@ const getAllBooksFromDB = (query) => __awaiter(void 0, void 0, void 0, function*
         result: result,
         meta: meta,
     };
-});
-//Retrieves all books from the database by category
-const getAllBooksByCategory = (searchTerm) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield book_model_1.Product.find({
-        $or: [
-            { title: { $regex: searchTerm, $options: 'i' } },
-            { author: { $regex: searchTerm, $options: 'i' } },
-            { category: { $regex: searchTerm, $options: 'i' } },
-        ],
-    });
-    return result;
 });
 //Retrieves a single book from the database.
 const getSignleBookFromDB = (bookId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -69,5 +59,4 @@ exports.BookService = {
     getSignleBookFromDB,
     updateBookIntoDB,
     deleteBookFromDB,
-    getAllBooksByCategory,
 };

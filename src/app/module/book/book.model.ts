@@ -6,16 +6,20 @@ const productSchema = new Schema<TBook>(
   {
     name: {
       type: String,
+      required:true
     },
     imgUrl:{
       type:String,
+      required:true
     },
     author: {
       type: String,
+      required:true
     },
     price: {
       type: Number,
       min: [0, "Price must be a positive number"],
+      required:true
     },
     category: {
       type: String,

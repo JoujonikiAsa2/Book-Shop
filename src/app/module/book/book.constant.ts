@@ -1,1 +1,1 @@
-export const bookSearchFields = ['title', 'author', 'category']
+export const bookSearchFields = ['name', 'author', 'category']

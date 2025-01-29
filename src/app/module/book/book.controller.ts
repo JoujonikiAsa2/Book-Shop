@@ -66,6 +66,20 @@ const deleteBook = asyncHandler(async (req, res) => {
   })
 })
 
+
+// //controller for deleting a book
+// const getFilterdProductByPrice = asyncHandler(async (req, res) => {
+//   const query = req.query
+//   const result = await BookService.getFilterdProductByPrice(query)
+//   apiResponseHandler(res, {
+//     statusCode: httpStatus.OK,
+//     success:true,
+//     message: 'Books retrived successfully!',
+//     data:result
+//   })
+// })
+
+
 //exporting controllers
 export const BookController = {
   createBook,
@@ -73,4 +87,5 @@ export const BookController = {
   getBookById,
   updateBook,
   deleteBook,
+  // getFilterdProductByPrice
 }

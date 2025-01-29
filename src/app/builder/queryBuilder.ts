@@ -1,75 +1,98 @@
-import { FilterQuery, Query } from 'mongoose'
+import { FilterQuery, Query } from 'mongoose';
 
 class QueryBuilder<T> {
   public modelQuery: Query<T[], T>;
   public query: Record<string, unknown>;
 
   constructor(modelQuery: Query<T[], T>, query: Record<string, unknown>) {
-    this.modelQuery = modelQuery
-    this.query = query
+    this.modelQuery = modelQuery;
+    this.query = query;
   }
 
-  search(fields: string[]) {
-    if (this.query.search) {
-      const searchRegex = new RegExp(this.query.search as string, 'i')
+  search(searchableFields: string[]) {
+    const searchTerm = this?.query?.searchTerm;
+    if (searchTerm) {
       this.modelQuery = this.modelQuery.find({
-        $or: fields.map(field => ({ [field]: searchRegex })),
-      })
+        $or: searchableFields.map(
+          (field) =>
+            ({
+              [field]: { $regex: searchTerm, $options: 'i' },
+            }) as FilterQuery<T>,
+        ),
+      });
     }
-    return this
-  }
 
-  filter() {
-    const queryObj = { ...this.query }
-    const excludedFields = [
-      'searchTerm',
-      'sort',
-      'limit',
-      'page',
-      'skip',
-      'fields',
-    ]
-    excludedFields.forEach(el => delete queryObj[el])
-    if (this.query.minPrice && this.query.maxPrice) {
-      this.modelQuery = this.modelQuery.find({
-        $and: [
-          { price: { $gt: this.query.minPrice } },
-          { price: { $lte: this.query.maxPrice } },
-        ],
-      } as FilterQuery<T>)
-    } else {
-      this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>)
-    }
-    return this
-  }
-  sort() {
-    const sort =
-      (this?.query?.sort as string)?.split(',')?.join() || '-createdAt'
-    this.modelQuery = this.modelQuery.sort(sort as string)
-    return this
-  }
-
-  paginate() {
-    const page = Number(this?.query?.page) | 1;
-    const limit = Number(this?.query?.limit) | 1;
-    const skip = (page - 1) * limit | 1;
-    this.modelQuery = this.modelQuery.skip(skip).limit(limit);
     return this;
   }
 
+  filter() {
+    const queryObj = { ...this.query }; // copy
+
+    // Filtering
+    const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields', 'minPrice', 'maxPrice'];
+
+    excludeFields.forEach((el) => delete queryObj[el]);
+
+    this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
+
+    return this;
+  }
+
+  priceRange() {
+    const { minPrice, maxPrice } = this.query;
+    if (minPrice || maxPrice) {
+      const priceFilter: Record<string,unknown> = {};
+
+      if (minPrice) priceFilter.$gte = minPrice
+      if (maxPrice) priceFilter.$lte = maxPrice
+
+      this.modelQuery = this.modelQuery.find({
+        price: priceFilter,
+      });
+    }
+
+    return this;
+  }
+
+  sort() {
+    const sort =
+      (this?.query?.sort as string)?.split(',')?.join(' ') || '-createdAt';
+    this.modelQuery = this.modelQuery.sort(sort as string);
+
+    return this;
+  }
+
+  paginate() {
+    const page = Number(this?.query?.page) || 1;
+    const limit = Number(this?.query?.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    this.modelQuery = this.modelQuery.skip(skip).limit(limit);
+
+    return this;
+  }
+
+  fields() {
+    const fields =
+      (this?.query?.fields as string)?.split(',')?.join(' ') || '-__v';
+
+    this.modelQuery = this.modelQuery.select(fields);
+    return this;
+  }
   async count() {
-    const filter =  this.modelQuery.getFilter()
-    const total = await this.modelQuery.model.countDocuments(filter)
-    const page = Number(this.query.page)
-    const limit = Number(this.query.limit)
-    const totalPage = Math.ceil(total / limit)
+    const totalQueries = this.modelQuery.getFilter();
+    const total = await this.modelQuery.model.countDocuments(totalQueries);
+    const page = Number(this?.query?.page) || 1;
+    const limit = Number(this?.query?.limit) || 10;
+    const totalPage = Math.ceil(total / limit);
+
     return {
       page,
       limit,
       total,
-      totalPage
-    }
+      totalPage,
+    };
   }
 }
 
-export default QueryBuilder
+export default QueryBuilder;

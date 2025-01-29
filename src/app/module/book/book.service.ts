@@ -1,5 +1,4 @@
 import QueryBuilder from '../../builder/queryBuilder'
-import { TUser } from '../user/user.interface'
 import { bookSearchFields } from './book.constant'
 import { TBook } from './book.interface'
 import { Product } from './book.model'
@@ -11,10 +10,11 @@ const createBookIntoDB = async (product: TBook) => {
 }
 
 //Retrieves all books from the database
-const getAllBooksFromDB = async (query: Partial<TUser>) => {
-  const bookQuery = new QueryBuilder(Product.find(), query)
+const getAllBooksFromDB = async (query: Record<string, unknown>) => {
+  const bookQuery = new QueryBuilder(Product.find({}), query)
     .search(bookSearchFields)
     .filter()
+    .priceRange()
     .sort()
     .paginate()
 
@@ -26,23 +26,12 @@ const getAllBooksFromDB = async (query: Partial<TUser>) => {
   }
 }
 
-//Retrieves all books from the database by category
-const getAllBooksByCategory = async (searchTerm: string) => {
-  const result = await Product.find({
-    $or: [
-      { title: { $regex: searchTerm, $options: 'i' } },
-      { author: { $regex: searchTerm, $options: 'i' } },
-      { category: { $regex: searchTerm, $options: 'i' } },
-    ],
-  })
-  return result
-}
-
 //Retrieves a single book from the database.
 const getSignleBookFromDB = async (bookId: string) => {
   const result = await Product.findById(bookId)
   return result
 }
+
 
 //Updates a book into the database
 const updateBookIntoDB = async (bookId: string, product: TBook) => {
@@ -58,11 +47,11 @@ const deleteBookFromDB = async (bookId: string) => {
   return result
 }
 
+
 export const BookService = {
   createBookIntoDB,
   getAllBooksFromDB,
   getSignleBookFromDB,
   updateBookIntoDB,
   deleteBookFromDB,
-  getAllBooksByCategory,
 }
