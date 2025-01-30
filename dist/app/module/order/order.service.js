@@ -22,6 +22,8 @@ const order_model_1 = require("./order.model");
 const http_status_1 = __importDefault(require("http-status"));
 const book_model_1 = require("../book/book.model");
 const order_utils_1 = require("./order.utils");
+const auth_utils_1 = require("../auth/auth.utils");
+const config_1 = __importDefault(require("../../config"));
 const createOrderIntoDB = (user, payload, client_ip) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const userInfo = yield user_model_1.User.findOne({ email: user.email });
@@ -106,9 +108,15 @@ const getAllOrderFromDB = (query) => __awaiter(void 0, void 0, void 0, function*
         meta,
     };
 });
-const getOrdersByUserIdFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield order_model_1.Order.find({ user: userId });
-    return result;
+const getOrdersByUserIdFromDB = (userId, token) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield (0, auth_utils_1.verifyToken)(token, config_1.default.jwt.access_secret);
+    if (userId === user.user) {
+        const result = yield order_model_1.Order.find({ user: userId });
+        return result;
+    }
+    else {
+        throw new AppError_1.default('Unauthorized Access', http_status_1.default.UNAUTHORIZED);
+    }
 });
 const getOrderByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = order_model_1.Order.findById(id);
@@ -119,5 +127,5 @@ exports.OrderService = {
     verifyPayment,
     getAllOrderFromDB,
     getOrderByIdFromDB,
-    getOrdersByUserIdFromDB
+    getOrdersByUserIdFromDB,
 };

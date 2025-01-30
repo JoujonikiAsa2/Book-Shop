@@ -24,6 +24,7 @@ const updateProfile = async (id: string, payload: Record<string, unknown>) => {
   const result = await User.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   })
+  console.log('yufgsdfsd', result)
   return result
 }
 

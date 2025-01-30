@@ -24,7 +24,7 @@ const createOrder = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(voi
         statusCode: http_status_1.default.CREATED,
         success: true,
         message: 'Order created successfully!',
-        data: result
+        data: result,
     });
 }));
 const verifyPayment = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,7 +32,7 @@ const verifyPayment = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(v
     (0, apiResponseHandler_1.apiResponseHandler)(res, {
         statusCode: http_status_1.default.CREATED,
         success: true,
-        message: "Order verified successfully",
+        message: 'Order verified successfully',
         data: verifiedPayment,
     });
 }));
@@ -44,16 +44,18 @@ const getAllOrders = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(vo
         success: true,
         message: 'Orders retrieved successfully!',
         data: result.result,
-        meta: result.meta
+        meta: result.meta,
     });
 }));
 const getOrdersByUserId = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield order_service_1.OrderService.getOrdersByUserIdFromDB(req.params.userId);
+    var _a;
+    const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
+    const result = yield order_service_1.OrderService.getOrdersByUserIdFromDB(req.params.userId, token);
     (0, apiResponseHandler_1.apiResponseHandler)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'User orders retrieved successfully!',
-        data: result
+        data: result,
     });
 }));
 const getOrderById = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -63,7 +65,7 @@ const getOrderById = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(vo
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'Order retrieved successfully!',
-        data: result
+        data: result,
     });
 }));
 exports.orderController = {
@@ -71,5 +73,5 @@ exports.orderController = {
     verifyPayment,
     getAllOrders,
     getOrderById,
-    getOrdersByUserId
+    getOrdersByUserId,
 };

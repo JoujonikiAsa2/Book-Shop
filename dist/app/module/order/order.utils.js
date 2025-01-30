@@ -25,7 +25,9 @@ const makePayment = (paymentPayload) => __awaiter(void 0, void 0, void 0, functi
 });
 const verifyPaymentAsync = (order_id) => {
     return new Promise((resolve, reject) => {
-        shurjopay.verifyPayment(order_id, (response) => resolve(response), (error) => reject(error));
+        shurjopay.verifyPayment(order_id, (response) => {
+            resolve(response);
+        }, (error) => reject(error));
     });
 };
 exports.orderUtils = {

@@ -29,18 +29,15 @@ const auth = (...requiredRoles: TUserRole[]) => {
     const userInfo = await User.findOne({ email });
 
     if (!userInfo) {
-      console.log("This user is not found !")
       throw new AppError("This user is not found !", httpStatus.NOT_FOUND);
     }
 
 
     if (requiredRoles && requiredRoles.includes(role)) {
       req.user = decoded as JwtPayload
-      console.log('req.user',req.user)
     } else {
       throw new AppError('You are not Authorized', httpStatus.UNAUTHORIZED)
     }
-    console.log('i am here')
 
     next()
   })

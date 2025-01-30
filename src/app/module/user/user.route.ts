@@ -7,8 +7,8 @@ const router = Router()
 router.get('/',auth(USER_ROLE.admin),userControllers.getAllUser)
 router.get(
     '/me',
-    auth(USER_ROLE.user),
+    auth(USER_ROLE.user, USER_ROLE.admin),
     userControllers.getMe,
   );
-  router.patch('/update-profile/:id',auth(USER_ROLE.user, USER_ROLE.admin),userControllers.getAllUser)
+  router.patch('/update-profile/:id',auth(USER_ROLE.user, USER_ROLE.admin),userControllers.updateProfile)
 export const userRoutes = router

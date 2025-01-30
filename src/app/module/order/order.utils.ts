@@ -28,7 +28,9 @@ const verifyPaymentAsync = (
     return new Promise((resolve, reject) => {
       shurjopay.verifyPayment(
         order_id,
-        (response) => resolve(response),
+        (response) => {
+          resolve(response)
+        },
         (error) => reject(error)
       );
     });

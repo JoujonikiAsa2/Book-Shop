@@ -10,6 +10,8 @@ import { Order } from './order.model'
 import httpStatus from 'http-status'
 import { Product } from '../book/book.model'
 import { orderUtils } from './order.utils'
+import { validateUser, verifyToken } from '../auth/auth.utils'
+import config from '../../config'
 
 const createOrderIntoDB = async (
   user: JwtPayload,
@@ -113,9 +115,15 @@ const getAllOrderFromDB = async (query: Record<string, unknown>) => {
   }
 }
 
-const getOrdersByUserIdFromDB = async (userId: string) => {
-  const result = await Order.find({user: userId})
-  return result
+const getOrdersByUserIdFromDB = async (userId: string, token: string) => {
+  const user = await verifyToken(token, config.jwt.access_secret as string)
+  if (userId === user.user) {
+    const result = await Order.find({ user: userId })
+    return result
+  }
+  else{
+    throw new AppError('Unauthorized Access', httpStatus.UNAUTHORIZED)
+  }
 }
 
 const getOrderByIdFromDB = async (id: string) => {
@@ -123,11 +131,10 @@ const getOrderByIdFromDB = async (id: string) => {
   return result
 }
 
-
 export const OrderService = {
   createOrderIntoDB,
   verifyPayment,
   getAllOrderFromDB,
   getOrderByIdFromDB,
-  getOrdersByUserIdFromDB
+  getOrdersByUserIdFromDB,
 }
