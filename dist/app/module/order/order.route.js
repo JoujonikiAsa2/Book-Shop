@@ -15,4 +15,6 @@ router.get("/", (0, auth_1.default)(user_constant_1.USER_ROLE.admin), order_cont
 router.get("/user-order/:userId", (0, auth_1.default)(user_constant_1.USER_ROLE.user, user_constant_1.USER_ROLE.admin), order_controller_1.orderController.getOrdersByUserId);
 router.get("/user/payment/verify", (0, auth_1.default)(user_constant_1.USER_ROLE.user, user_constant_1.USER_ROLE.admin), order_controller_1.orderController.verifyPayment);
 router.get("/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.user, user_constant_1.USER_ROLE.admin), order_controller_1.orderController.getOrderById);
+router.delete("/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.admin), order_controller_1.orderController.deleteOrderById);
+router.patch("/:id", (0, auth_1.default)(user_constant_1.USER_ROLE.admin), order_controller_1.orderController.updateOrderById);
 exports.orderRoutes = router;

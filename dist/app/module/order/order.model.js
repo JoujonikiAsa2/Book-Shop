@@ -52,7 +52,7 @@ const OrderSchema = new mongoose_1.Schema({
     city: {
         type: String,
         required: true,
-    },
+    }
 }, {
     timestamps: true,
 });

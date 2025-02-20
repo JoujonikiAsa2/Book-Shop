@@ -122,10 +122,20 @@ const getOrderByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* (
     const result = order_model_1.Order.findById(id);
     return result;
 });
+const deleteOrderFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_model_1.Order.findByIdAndDelete(id);
+    return result;
+});
+const UpdatedOrderIntoDb = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_model_1.Order.findByIdAndUpdate(id, payload, { new: true });
+    return result;
+});
 exports.OrderService = {
     createOrderIntoDB,
     verifyPayment,
     getAllOrderFromDB,
     getOrderByIdFromDB,
     getOrdersByUserIdFromDB,
+    deleteOrderFromDb,
+    UpdatedOrderIntoDb
 };

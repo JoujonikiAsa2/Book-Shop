@@ -68,10 +68,31 @@ const getOrderById = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(vo
         data: result,
     });
 }));
+const deleteOrderById = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const result = yield order_service_1.OrderService.deleteOrderFromDb(id);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: result !== null ? 'Order deleted successfully!' : 'Order already deleted!',
+    });
+}));
+const updateOrderById = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const result = yield order_service_1.OrderService.UpdatedOrderIntoDb(id, req.body);
+    (0, apiResponseHandler_1.apiResponseHandler)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Order updated successfully!',
+        data: result
+    });
+}));
 exports.orderController = {
     createOrder,
     verifyPayment,
     getAllOrders,
     getOrderById,
     getOrdersByUserId,
+    deleteOrderById,
+    updateOrderById
 };
