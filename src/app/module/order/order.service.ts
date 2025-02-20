@@ -131,10 +131,21 @@ const getOrderByIdFromDB = async (id: string) => {
   return result
 }
 
+const deleteOrderFromDb = async(id: string) =>{
+  const result = await Order.findByIdAndDelete(id)
+  return result
+}
+const UpdatedOrderIntoDb = async(id: string, payload: Record<string, unknown>) =>{
+  const result = await Order.findByIdAndUpdate(id, payload, { new: true })
+  return result
+}
+
 export const OrderService = {
   createOrderIntoDB,
   verifyPayment,
   getAllOrderFromDB,
   getOrderByIdFromDB,
   getOrdersByUserIdFromDB,
+  deleteOrderFromDb,
+  UpdatedOrderIntoDb
 }

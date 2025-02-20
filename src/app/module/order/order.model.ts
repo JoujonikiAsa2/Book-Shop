@@ -50,7 +50,7 @@ const OrderSchema = new Schema({
   city: {
     type: String,
     required: true,
-  },
+  }
 }, {
   timestamps: true, 
 });

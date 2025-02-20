@@ -63,10 +63,33 @@ const getOrderById = asyncHandler(async (req, res) => {
   })
 })
 
+const deleteOrderById = asyncHandler(async (req, res) => {
+  const id = req.params.id
+  const result = await OrderService.deleteOrderFromDb(id)
+  apiResponseHandler(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: result !== null ? 'Order deleted successfully!' : 'Order already deleted!',
+  })
+})
+
+const updateOrderById = asyncHandler(async (req, res) => {
+  const id = req.params.id
+  const result = await OrderService.UpdatedOrderIntoDb(id, req.body)
+  apiResponseHandler(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Order updated successfully!',
+    data: result
+  })
+})
+
 export const orderController = {
   createOrder,
   verifyPayment,
   getAllOrders,
   getOrderById,
   getOrdersByUserId,
+  deleteOrderById,
+  updateOrderById
 }
