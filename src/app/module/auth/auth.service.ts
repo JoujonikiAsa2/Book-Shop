@@ -20,7 +20,7 @@ const registerUser = async (payload: TUser) => {
 
 const loginUser = async (payload: TLoginUser) => {
   const { email, password } = payload
-
+  console.log(email, password)
   const user = await validateUser(email)
 
   const passwordMatch = await User.isPasswordMatch(password, user?.password)
@@ -45,6 +45,8 @@ const loginUser = async (payload: TLoginUser) => {
     config.jwt.refresh_secret as string,
     config.jwt.refresh_expires_in as string,
   )
+
+  console.log(accessToken, refreshToken)
 
   return {
     accessToken,
@@ -126,17 +128,17 @@ const forgetPassword = async (email: string) => {
 }
 
 const resetPassword = async (
-  payload: { email:string, newPassword: string },
-  token:string
+  payload: { email: string; newPassword: string },
+  token: string,
 ) => {
   const { email } = payload
 
   await validateUser(email)
 
-  const decoded = verifyToken(token, config.jwt.access_secret as string);
+  const decoded = verifyToken(token, config.jwt.access_secret as string)
 
   if (payload.email !== decoded?.email) {
-    throw new AppError('Forbidden access', httpStatus.FORBIDDEN);
+    throw new AppError('Forbidden access', httpStatus.FORBIDDEN)
   }
 
   const newPassword = await bcrypt.hash(
@@ -159,5 +161,5 @@ export const authServices = {
   refreshToken,
   changePassword,
   forgetPassword,
-  resetPassword
+  resetPassword,
 }

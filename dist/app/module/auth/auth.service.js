@@ -30,6 +30,7 @@ const registerUser = (payload) => __awaiter(void 0, void 0, void 0, function* ()
 });
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload;
+    console.log(email, password);
     const user = yield (0, auth_utils_1.validateUser)(email);
     const passwordMatch = yield user_model_1.User.isPasswordMatch(password, user === null || user === void 0 ? void 0 : user.password);
     if (!passwordMatch) {
@@ -42,6 +43,7 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     };
     const accessToken = (0, auth_utils_1.createToken)(jwtPayload, config_1.default.jwt.access_secret, config_1.default.jwt.access_expires_in);
     const refreshToken = (0, auth_utils_1.createToken)(jwtPayload, config_1.default.jwt.refresh_secret, config_1.default.jwt.refresh_expires_in);
+    console.log(accessToken, refreshToken);
     return {
         accessToken,
         refreshToken,
@@ -101,5 +103,5 @@ exports.authServices = {
     refreshToken,
     changePassword,
     forgetPassword,
-    resetPassword
+    resetPassword,
 };
