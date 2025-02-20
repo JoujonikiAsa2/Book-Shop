@@ -28,7 +28,7 @@ const updateUserData = async (id: string, payload: Record<string, unknown>) => {
 }
 
 const deleteSingleUser = async (id: string) => {
-  const result = await User.findById( id )
+  const result = await User.findByIdAndDelete( id )
   return result
 }
 
