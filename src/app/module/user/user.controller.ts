@@ -12,7 +12,8 @@ const getAllUser = asyncHandler(async (req, res) => {
     statusCode: 200,
     success: true,
     message: 'User retrieved successfully!',
-    data: result,
+    data: result.result,
+    meta: result.meta,
   })
 })
 

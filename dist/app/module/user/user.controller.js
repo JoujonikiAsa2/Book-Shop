@@ -25,7 +25,8 @@ const getAllUser = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void
         statusCode: 200,
         success: true,
         message: 'User retrieved successfully!',
-        data: result,
+        data: result.result,
+        meta: result.meta,
     });
 }));
 const getMe = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

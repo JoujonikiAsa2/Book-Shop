@@ -16,9 +16,17 @@ exports.userServices = void 0;
 const queryBuilder_1 = __importDefault(require("../../builder/queryBuilder"));
 const user_model_1 = require("./user.model");
 const getAllUsers = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const userQuery = new queryBuilder_1.default(user_model_1.User.find({}), query).search(['name']);
+    const userQuery = new queryBuilder_1.default(user_model_1.User.find({}), query)
+        .search(['name'])
+        .filter()
+        .sort()
+        .paginate();
     const result = yield userQuery.modelQuery;
-    return result;
+    const meta = yield userQuery.count();
+    return {
+        result,
+        meta,
+    };
 });
 const getMe = (email, role) => __awaiter(void 0, void 0, void 0, function* () {
     let result = null;
@@ -44,5 +52,5 @@ exports.userServices = {
     getAllUsers,
     getMe,
     updateUserData,
-    deleteSingleUser
+    deleteSingleUser,
 };

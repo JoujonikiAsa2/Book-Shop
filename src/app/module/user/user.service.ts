@@ -1,24 +1,31 @@
 import QueryBuilder from '../../builder/queryBuilder'
 import { User } from './user.model'
 
-
 const getAllUsers = async (query: Record<string, unknown>) => {
-  const userQuery = new QueryBuilder(User.find({}), query).search(['name'])
+  const userQuery = new QueryBuilder(User.find({}), query)
+    .search(['name'])
+    .filter()
+    .sort()
+    .paginate()
   const result = await userQuery.modelQuery
-  return result
+  const meta = await userQuery.count()
+  return {
+    result,
+    meta,
+  }
 }
 
 const getMe = async (email: string, role: string) => {
-  let result = null;
+  let result = null
   if (role === 'user') {
-    result = await User.findOne({ email: email });
+    result = await User.findOne({ email: email })
   }
   if (role === 'admin') {
-    result = await User.findOne({ email: email });
+    result = await User.findOne({ email: email })
   }
 
-  return result;
-};
+  return result
+}
 
 const updateUserData = async (id: string, payload: Record<string, unknown>) => {
   const result = await User.findOneAndUpdate({ _id: id }, payload, {
@@ -28,7 +35,7 @@ const updateUserData = async (id: string, payload: Record<string, unknown>) => {
 }
 
 const deleteSingleUser = async (id: string) => {
-  const result = await User.findByIdAndDelete( id )
+  const result = await User.findByIdAndDelete(id)
   return result
 }
 
@@ -36,5 +43,5 @@ export const userServices = {
   getAllUsers,
   getMe,
   updateUserData,
-  deleteSingleUser
+  deleteSingleUser,
 }
