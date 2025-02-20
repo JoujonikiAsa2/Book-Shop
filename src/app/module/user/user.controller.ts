@@ -33,19 +33,30 @@ const getMe = asyncHandler(async (req, res) => {
   });
 });
 
-const updateProfile = asyncHandler(async (req, res) => {
-  const result = await userServices.updateProfile(req.params.id, req.body)
+const updateUserData = asyncHandler(async (req, res) => {
+  const result = await userServices.updateUserData(req.params.id, req.body)
   apiResponseHandler(res, {
     statusCode: 200,
     success: true,
-    message: 'Profile updated successfully!',
+    message: 'Updated successfully!',
     data: result,
   })
 })
 
+const deleteSignleUser = asyncHandler(async (req, res) => {
+  const result = await userServices.deleteSingleUser(req.params.id)
+  apiResponseHandler(res, {
+    statusCode: 200,
+    success: true,
+    message: 'deleted successfully!',
+    data: result,
+  })
+})
 
 export const userControllers = {
   getAllUser,
   getMe,
-  updateProfile
+  updateUserData,
+  deleteSignleUser
+
 }

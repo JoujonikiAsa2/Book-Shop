@@ -30,15 +30,19 @@ const getMe = (email, role) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
-const updateProfile = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUserData = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.findOneAndUpdate({ _id: id }, payload, {
         new: true,
     });
-    console.log('yufgsdfsd', result);
+    return result;
+});
+const deleteSingleUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.User.findById(id);
     return result;
 });
 exports.userServices = {
     getAllUsers,
     getMe,
-    updateProfile
+    updateUserData,
+    deleteSingleUser
 };

@@ -20,16 +20,21 @@ const getMe = async (email: string, role: string) => {
   return result;
 };
 
-const updateProfile = async (id: string, payload: Record<string, unknown>) => {
+const updateUserData = async (id: string, payload: Record<string, unknown>) => {
   const result = await User.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   })
-  console.log('yufgsdfsd', result)
+  return result
+}
+
+const deleteSingleUser = async (id: string) => {
+  const result = await User.findById( id )
   return result
 }
 
 export const userServices = {
   getAllUsers,
   getMe,
-  updateProfile
+  updateUserData,
+  deleteSingleUser
 }

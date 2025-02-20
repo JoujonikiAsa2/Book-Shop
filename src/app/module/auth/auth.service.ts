@@ -20,7 +20,6 @@ const registerUser = async (payload: TUser) => {
 
 const loginUser = async (payload: TLoginUser) => {
   const { email, password } = payload
-  console.log(email, password)
   const user = await validateUser(email)
 
   const passwordMatch = await User.isPasswordMatch(password, user?.password)
@@ -45,8 +44,6 @@ const loginUser = async (payload: TLoginUser) => {
     config.jwt.refresh_secret as string,
     config.jwt.refresh_expires_in as string,
   )
-
-  console.log(accessToken, refreshToken)
 
   return {
     accessToken,

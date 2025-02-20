@@ -10,5 +10,6 @@ router.get(
     auth(USER_ROLE.user, USER_ROLE.admin),
     userControllers.getMe,
   );
-  router.patch('/update-profile/:id',auth(USER_ROLE.user, USER_ROLE.admin),userControllers.updateProfile)
+  router.patch('/update-profile/:id', auth(USER_ROLE.user, USER_ROLE.admin), userControllers.updateUserData)
+  router.delete('/:id',auth(USER_ROLE.admin),userControllers.deleteSignleUser)
 export const userRoutes = router
